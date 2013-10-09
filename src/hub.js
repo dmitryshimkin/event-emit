@@ -1,16 +1,24 @@
 var Hub = (function () {
+  var subscribers = {};
 
   return {
     pub: function (event) {
-      //
+      return this;
     },
 
-    sub: function (event, handler, context) {
-      //
+    reset: function () {
+      subscribers = {};
+      return this;
     },
 
-    unsub: function (event, handler) {
-      //
+    sub: function (msg, handler, context) {
+
+      return this;
+    },
+
+    unsub: function (msg, handler) {
+
+      return this;
     }
   }
 }());
