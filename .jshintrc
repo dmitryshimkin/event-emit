@@ -1,0 +1,19 @@
+{
+  "globals": {
+    "window": true
+  },
+  "boss": true,
+  "curly": true,
+  "eqeqeq": true,
+  "eqnull": true,
+  "es5": true,
+  "immed": true,
+  "latedef": true,
+  "newcap": true,
+  "noarg": true,
+  "node": true,
+  "strict": true,
+  "sub": true,
+  "undef": true,
+  "white": true
+}
