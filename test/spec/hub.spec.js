@@ -135,6 +135,8 @@
           __log.push('channel_4b');
         };
 
+        Hub.unsub('channel_3'); // unsub before sub
+
         Hub.sub('channel_1', handler_1a);
         Hub.sub('channel_1', handler_1b);
         Hub.sub('channel_2', handler_2);
