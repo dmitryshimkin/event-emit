@@ -9,16 +9,14 @@
    */
   
   var trim = function (str) {
-    return str.replace(trim.reg, '');
+    return str.replace(trim.r, '');
   };
   
-  trim.reg = /^\s+|\s+$/g;
+  trim.r = /^\s+|\s+$/g;
   var subscriptions = {};
   var rSplit = /\s+/;
   var slice = Array.prototype.slice;
-  var clean = function () {
-    //
-  };
+  var length = 'length';
   
   /**
    * Hub
@@ -32,7 +30,7 @@
   
     var args = slice.call(arguments);
   
-    var channelsCount = channels.length;
+    var channelsCount = channels[length];
     var channel;
     var i = -1;
   
@@ -42,13 +40,13 @@
       channel = channels[i];
   
       subscribers = subscriptions[channel] || [];
-      subscribersCount = subscribers.length;
+      subscribersCount = subscribers[length];
       j = -1;
   
       while (++j < subscribersCount) {
         args[0] = channel;
         subscriber = subscribers[j];
-        subscriber.handler.apply(subscriber.context, args);
+        subscriber.fn.apply(subscriber.ctx, args);
       }
     }
   
@@ -63,16 +61,17 @@
   Hub['sub'] =  function (channels, handler, context) {
     channels = trim(channels).split(rSplit);
   
-    var channelsCount = channels.length;
+    var channelsCount = channels[length];
     var channel;
     var i = -1;
   
     while (++i < channelsCount) {
       channel = channels[i];
+  
       subscriptions[channel] = subscriptions[channel] || [];
       subscriptions[channel].push({
-        handler: handler,
-        context: context
+        ctx: context,
+        fn: handler
       });
     }
   
@@ -82,7 +81,7 @@
   Hub['unsub'] = function (channels, handler) {
     channels = trim(channels).split(rSplit);
   
-    var channelsCount = channels.length;
+    var channelsCount = channels[length];
     var channel;
     var i = -1;
   
@@ -93,7 +92,7 @@
       channel = channels[i];
   
       subscribers = subscriptions[channel] || [];
-      subscribersCount = subscribers.length;
+      subscribersCount = subscribers[length];
       j = -1;
   
       retain = [];
@@ -101,7 +100,7 @@
       if (handler !== undefined) {
         while (++j < subscribersCount) {
           subscriber = subscribers[j];
-          if (subscriber.handler !== handler) {
+          if (subscriber.fn !== handler) {
             retain.push(subscriber);
           }
         }
@@ -118,14 +117,16 @@
    * Export
    */
   
-  if (typeof module === 'object' && typeof module.exports === 'object') {
+  var obj = 'object';
+  
+  if (typeof module === obj && typeof module.exports === obj) {
     module.exports = Hub;
   } else if (typeof define === 'function' && define.amd) {
     define('Hub', [], function () {
       return Hub;
     });
-  } else if (typeof window === 'object') {
-    window.Hub = Hub;
+  } else if (typeof window === obj) {
+    window['Hub'] = Hub;
   }
 
 }());

@@ -1,9 +1,7 @@
 var subscriptions = {};
 var rSplit = /\s+/;
 var slice = Array.prototype.slice;
-var clean = function () {
-  //
-};
+var length = 'length';
 
 /**
  * Hub
@@ -17,7 +15,7 @@ Hub['pub'] = function (channels) {
 
   var args = slice.call(arguments);
 
-  var channelsCount = channels.length;
+  var channelsCount = channels[length];
   var channel;
   var i = -1;
 
@@ -27,13 +25,13 @@ Hub['pub'] = function (channels) {
     channel = channels[i];
 
     subscribers = subscriptions[channel] || [];
-    subscribersCount = subscribers.length;
+    subscribersCount = subscribers[length];
     j = -1;
 
     while (++j < subscribersCount) {
       args[0] = channel;
       subscriber = subscribers[j];
-      subscriber.handler.apply(subscriber.context, args);
+      subscriber.fn.apply(subscriber.ctx, args);
     }
   }
 
@@ -48,16 +46,17 @@ Hub['reset'] = function () {
 Hub['sub'] =  function (channels, handler, context) {
   channels = trim(channels).split(rSplit);
 
-  var channelsCount = channels.length;
+  var channelsCount = channels[length];
   var channel;
   var i = -1;
 
   while (++i < channelsCount) {
     channel = channels[i];
+
     subscriptions[channel] = subscriptions[channel] || [];
     subscriptions[channel].push({
-      handler: handler,
-      context: context
+      ctx: context,
+      fn: handler
     });
   }
 
@@ -67,7 +66,7 @@ Hub['sub'] =  function (channels, handler, context) {
 Hub['unsub'] = function (channels, handler) {
   channels = trim(channels).split(rSplit);
 
-  var channelsCount = channels.length;
+  var channelsCount = channels[length];
   var channel;
   var i = -1;
 
@@ -78,7 +77,7 @@ Hub['unsub'] = function (channels, handler) {
     channel = channels[i];
 
     subscribers = subscriptions[channel] || [];
-    subscribersCount = subscribers.length;
+    subscribersCount = subscribers[length];
     j = -1;
 
     retain = [];
@@ -86,7 +85,7 @@ Hub['unsub'] = function (channels, handler) {
     if (handler !== undefined) {
       while (++j < subscribersCount) {
         subscriber = subscribers[j];
-        if (subscriber.handler !== handler) {
+        if (subscriber.fn !== handler) {
           retain.push(subscriber);
         }
       }

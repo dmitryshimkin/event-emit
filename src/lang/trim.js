@@ -6,7 +6,7 @@
  */
 
 var trim = function (str) {
-  return str.replace(trim.reg, '');
+  return str.replace(trim.r, '');
 };
 
-trim.reg = /^\s+|\s+$/g;
+trim.r = /^\s+|\s+$/g;

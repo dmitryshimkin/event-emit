@@ -76,6 +76,8 @@ module.exports = function (grunt) {
       }
     },
 
+    package: grunt.file.readJSON('package.json'),
+
     uglify: {
       compress: {
         files: {
@@ -84,8 +86,16 @@ module.exports = function (grunt) {
           ]
         },
         options: {
+          banner: [
+            '/*!',
+            ' * <%= package.name %> - v<%= package.version %>',
+            ' * <%= grunt.template.today("yyyy-mm-dd") %>',
+            ' */',
+            ''
+          ].join('\n'),
           mangle: true,
-          sourceMap: 'build/hub_sourcemap'
+          report: 'gzip'
+          //sourceMap: 'build/hub_sourcemap'
         }
       }
     },

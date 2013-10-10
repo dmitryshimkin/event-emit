@@ -183,16 +183,16 @@
     <h1>Code coverage report for <span class="entity">build/hub.test.js</span></h1>
     <h2>
         
-        Statements: <span class="metric">95.52% <small>(64 / 67)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Statements: <span class="metric">95.59% <small>(65 / 68)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
         Branches: <span class="metric">70% <small>(14 / 20)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
-        Functions: <span class="metric">75% <small>(6 / 8)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Functions: <span class="metric">85.71% <small>(6 / 7)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
-        Lines: <span class="metric">95.52% <small>(64 / 67)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Lines: <span class="metric">95.59% <small>(65 / 68)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
     </h2>
     <div class="path"><a href="../index.html">All files</a> &#187; <a href="index.html">build/</a> &#187; hub.test.js</div>
@@ -329,7 +329,8 @@
 128
 129
 130
-131</td><td class="line-coverage"><span class="cline-any cline-yes">1</span>
+131
+132</td><td class="line-coverage"><span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -348,8 +349,6 @@
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -400,6 +399,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">35</span>
 <span class="cline-any cline-yes">37</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">37</span>
 <span class="cline-any cline-yes">37</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -450,6 +450,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -470,16 +472,14 @@
    */
   
   var trim = function (str) {
-    return str.replace(trim.reg, '');
+    return str.replace(trim.r, '');
   };
   
-  trim.reg = /^\s+|\s+$/g;
+  trim.r = /^\s+|\s+$/g;
   var subscriptions = {};
   var rSplit = /\s+/;
   var slice = Array.prototype.slice;
-  var clean = <span class="fstat-no" title="function not covered" >function () {</span>
-    //
-  };
+  var length = 'length';
   
   /**
    * Hub
@@ -493,7 +493,7 @@
   
     var args = slice.call(arguments);
   
-    var channelsCount = channels.length;
+    var channelsCount = channels[length];
     var channel;
     var i = -1;
   
@@ -503,13 +503,13 @@
       channel = channels[i];
   
       subscribers = subscriptions[channel] || [];
-      subscribersCount = subscribers.length;
+      subscribersCount = subscribers[length];
       j = -1;
   
       while (++j &lt; subscribersCount) {
         args[0] = channel;
         subscriber = subscribers[j];
-        subscriber.handler.apply(subscriber.context, args);
+        subscriber.fn.apply(subscriber.ctx, args);
       }
     }
   
@@ -524,16 +524,17 @@
   Hub['sub'] =  function (channels, handler, context) {
     channels = trim(channels).split(rSplit);
   
-    var channelsCount = channels.length;
+    var channelsCount = channels[length];
     var channel;
     var i = -1;
   
     while (++i &lt; channelsCount) {
       channel = channels[i];
+  
       subscriptions[channel] = subscriptions[channel] || [];
       subscriptions[channel].push({
-        handler: handler,
-        context: context
+        ctx: context,
+        fn: handler
       });
     }
   
@@ -543,7 +544,7 @@
   Hub['unsub'] = function (channels, handler) {
     channels = trim(channels).split(rSplit);
   
-    var channelsCount = channels.length;
+    var channelsCount = channels[length];
     var channel;
     var i = -1;
   
@@ -554,7 +555,7 @@
       channel = channels[i];
   
       subscribers = subscriptions[channel] || <span class="branch-1 cbranch-no" title="branch not covered" >[];</span>
-      subscribersCount = subscribers.length;
+      subscribersCount = subscribers[length];
       j = -1;
   
       retain = [];
@@ -562,7 +563,7 @@
       if (handler !== undefined) {
         while (++j &lt; subscribersCount) {
           subscriber = subscribers[j];
-          if (subscriber.handler !== handler) {
+          if (subscriber.fn !== handler) {
             retain.push(subscriber);
           }
         }
@@ -579,14 +580,16 @@
    * Export
    */
   
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if (typeof module === 'object' &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >typeof module.exports === 'object')</span> {
+  var obj = 'object';
+  
+  <span class="missing-if-branch" title="if path not taken"" >I</span>if (typeof module === obj &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >typeof module.exports === obj)</span> {
 <span class="cstat-no" title="statement not covered" >    module.exports = Hub;</span>
   } else <span class="missing-if-branch" title="if path not taken"" >I</span>if (typeof define === 'function' &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >define.amd)</span> {
 <span class="cstat-no" title="statement not covered" >    define('Hub', [], <span class="fstat-no" title="function not covered" >function () {</span></span>
 <span class="cstat-no" title="statement not covered" >      return Hub;</span>
     });
-  } else <span class="missing-if-branch" title="else path not taken"" >E</span>if (typeof window === 'object') {
-    window.Hub = Hub;
+  } else <span class="missing-if-branch" title="else path not taken"" >E</span>if (typeof window === obj) {
+    window['Hub'] = Hub;
   }
 &nbsp;
 }());</pre></td></tr>
@@ -594,7 +597,7 @@
 
 </div>
 <div class="footer">
-    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Oct 10 2013 17:40:50 GMT+0400 (MSK)</div>
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Oct 10 2013 18:15:26 GMT+0400 (MSK)</div>
 </div>
 
 <script src="../prettify.js"></script>
