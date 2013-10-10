@@ -76,7 +76,7 @@ module.exports = function (grunt) {
       }
     },
 
-    package: grunt.file.readJSON('package.json'),
+    pkg: grunt.file.readJSON('package.json'),
 
     uglify: {
       compress: {
@@ -88,7 +88,7 @@ module.exports = function (grunt) {
         options: {
           banner: [
             '/*!',
-            ' * <%= package.name %> - v<%= package.version %>',
+            ' * <%= pkg.name %> - v<%= pkg.version %>',
             ' * <%= grunt.template.today("yyyy-mm-dd") %>',
             ' */',
             ''
