@@ -1,24 +1,31 @@
-var Hub = (function () {
+/**
+ * Hub
+ */
+
+var Hub = (function (undefined) {
+  var console = window.console;
   var subscribers = {};
+  var api = {};
 
-  return {
-    pub: function (event) {
-      return this;
-    },
+  api['pub'] = function (msg) {
+    console.log(msg);
+    return this;
+  };
 
-    reset: function () {
-      subscribers = {};
-      return this;
-    },
+  api['reset'] = function () {
+    subscribers = {};
+    return this;
+  };
 
-    sub: function (msg, handler, context) {
+  api['sub'] =  function (msg, handler, context) {
+    console.log(msg, handler, context);
+    return this;
+  };
 
-      return this;
-    },
+  api['unsub'] = function (msg, handler) {
+    console.log(msg, handler);
+    return this;
+  };
 
-    unsub: function (msg, handler) {
-
-      return this;
-    }
-  }
+  return api;
 }());

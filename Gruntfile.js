@@ -1,4 +1,4 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
   'use strict';
 
   grunt.initConfig({
@@ -47,7 +47,7 @@ module.exports = function(grunt) {
         src: 'build/hub.min.js',
         options: {
           specs: [
-            'test/specs/hub.spec.js'
+            'test/spec/hub.spec.js'
           ],
           template: require('grunt-template-jasmine-istanbul'),
           templateOptions: {
@@ -75,6 +75,20 @@ module.exports = function(grunt) {
       }
     },
 
+    uglify: {
+      compress: {
+        files: {
+          'build/hub.min.js': [
+            'build/hub.js'
+          ]
+        },
+        options: {
+          mangle: true,
+          sourceMap: 'build/hub_sourcemap'
+        }
+      }
+    },
+
     watch: {
       dev: {
         files: [
@@ -93,7 +107,7 @@ module.exports = function(grunt) {
         options: {
           indent: '  ',
           wrapper: [
-            ';(function (undefined) {\n\'use strict\';\n',
+            '(function () {\n  \'use strict\';\n',
             '\n}());'
           ]
         }
@@ -105,19 +119,24 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-wrap');
 
+  // build
   grunt.registerTask('build-dev', ['concat:dev', 'wrap']);
   grunt.registerTask('build-test', ['concat:test', 'wrap']);
-  grunt.registerTask('build-prod', ['build-dev']);
+  grunt.registerTask('build-prod', ['build-dev', 'uglify:compress']);
 
+  // test
   grunt.registerTask('test-dev', ['build-test', 'jasmine:dev']);
   grunt.registerTask('test-prod', ['build-prod', 'jasmine:prod']);
 
+  // alias
   grunt.registerTask('test', ['test-dev', 'clean:test']);
   grunt.registerTask('prod', ['build-prod']);
   grunt.registerTask('hint', ['build-dev', 'jshint']);
 
+  // default
   grunt.registerTask('default', ['build-dev']);
 };

@@ -1,19 +1,30 @@
 {
   "globals": {
+    "define": true,
     "window": true
   },
   "boss": true,
+  "camelcase": true,
   "curly": true,
   "eqeqeq": true,
   "eqnull": true,
-  "es5": true,
+  "es3": true,
+  "forin": true,
+  "indent": 2,
   "immed": true,
   "latedef": true,
+  "maxdepth": 4,
+  "maxlen": 80,
+  "maxparams": 4,
   "newcap": true,
   "noarg": true,
   "node": true,
+  "nonew": true,
+  "quotmark": "single",
   "strict": true,
   "sub": true,
+  "trailing": true,
   "undef": true,
+  "unused": true,
   "white": true
 }
