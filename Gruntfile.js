@@ -157,7 +157,7 @@ module.exports = function (grunt) {
   // alias
   grunt.registerTask('test', ['test-dev', 'clean:test']);
   grunt.registerTask('prod', ['build-prod']);
-  grunt.registerTask('hint', ['build-dev', 'jshint']);
+  grunt.registerTask('lint', ['build-dev', 'jshint']);
 
   // default
   grunt.registerTask('default', ['build-dev']);
