@@ -53,8 +53,8 @@ Hub['unsub'] = function (channels, handler) {
   channels = trim(channels).split(rSplit);
 
   var channelsCount = channels.length;
-  var i = -1;
   var channel, subscribers, subscriber, subscribersCount, j, retain;
+  var i = -1;
 
   while (++i < channelsCount) {
     channel = channels[i];

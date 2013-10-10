@@ -259,19 +259,19 @@
       it('should notify subscribers in proper order', function () {
         Hub.pub('channel');
 
-        Hub.sub('channel', function (msg) {
-          __log.push('0');
+        Hub.sub('channel', function () {
+          __log.push(1);
         });
 
-        Hub.sub('channel', function (msg) {
-          __log.push('1');
+        Hub.sub('channel', function () {
+          __log.push(2);
         });
 
         Hub.pub('channel');
 
         expect(__log.length).toBe(2);
-        expect(__log[0]).toBe(0);
-        expect(__log[1]).toBe(1);
+        expect(__log[0]).toBe(1);
+        expect(__log[1]).toBe(2);
       });
 
       // 4.2 multiple
