@@ -34,9 +34,7 @@
   
     while (++i < l) {
       subscriber = subscribers[i];
-      if (subscriber !== undefined) {
-        subscriber.handler.apply(subscriber.context, arguments);
-      }
+      subscriber.handler.apply(subscriber.context, arguments);
     }
   
     return this;
@@ -66,22 +64,32 @@
     return this;
   };
   
-  Hub['unsub'] = function (channel, handler) {
-    var subscribers = subscriptions[channel] || [];
-    var subscriber;
-    var l = subscribers.length;
-    var i = -1;
+  Hub['unsub'] = function (channels, handler) {
+    channels = trim(channels).split(rSplit);
   
-    if (handler !== undefined) {
-      while (++i < l) {
-        subscriber = subscribers[i];
-        if (subscriber !== undefined && subscriber.handler === handler) {
-          subscribers[i] = undefined;
-          return this;
+    var channelsCount = channels.length;
+    var i = -1;
+    var channel, subscribers, subscriber, subscribersCount, j, retain;
+  
+    while (++i < channelsCount) {
+      channel = channels[i];
+  
+      subscribers = subscriptions[channel] || [];
+      subscribersCount = subscribers.length;
+      retain = [];
+      j = -1;
+  
+      if (handler !== undefined) {
+        while (++j < subscribersCount) {
+          subscriber = subscribers[j];
+          if (subscriber.handler !== handler) {
+            retain.push(subscriber);
+          }
         }
+        subscriptions[channel] = retain;
+      } else {
+        subscriptions[channel] = [];
       }
-    } else {
-      subscriptions[channel].length = 0;
     }
   
     return this;

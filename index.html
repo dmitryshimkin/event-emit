@@ -6,20 +6,6 @@
     <script src="src/lang/trim.js"></script>
     <script src="src/hub.js"></script>
     <script>
-      var handler_1a = function () {
-        console.log('channel_1a');
-        Hub.unsub('channel_1', handler_1b);
-      };
-
-      var handler_1b = function () {
-        console.log('channel_1b');
-      };
-
-      Hub.sub('channel_1', handler_1a);
-      Hub.sub('channel_1', handler_1b);
-
-      Hub.pub('channel_1');
-      Hub.pub('channel_1');
     </script>
   </head>
   <body>
