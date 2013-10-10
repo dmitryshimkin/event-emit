@@ -118,7 +118,7 @@ module.exports = function (grunt) {
         options: {
           indent: '  ',
           wrapper: [
-            '(function () {\n  \'use strict\';\n',
+            '(function (undefined) {\n  \'use strict\';\n',
             '\n}());'
           ]
         }
@@ -129,7 +129,7 @@ module.exports = function (grunt) {
         options: {
           indent: '  ',
           wrapper: [
-            '(function () {\n  \'use strict\';\n',
+            '(function (undefined) {\n  \'use strict\';\n',
             '\n}());'
           ]
         }
