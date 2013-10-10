@@ -57,12 +57,16 @@ Hub['unsub'] = function (channel, handler) {
   var l = subscribers.length;
   var i = -1;
 
-  while (++i < l) {
-    subscriber = subscribers[i];
-    if (subscriber !== undefined && subscriber.handler === handler) {
-      subscribers[i] = undefined;
-      return this;
+  if (handler !== undefined) {
+    while (++i < l) {
+      subscriber = subscribers[i];
+      if (subscriber !== undefined && subscriber.handler === handler) {
+        subscribers[i] = undefined;
+        return this;
+      }
     }
+  } else {
+    subscriptions[channel].length = 0;
   }
 
   return this;
