@@ -8,49 +8,18 @@
     <script>
       var handler_1a = function () {
         console.log('channel_1a');
+        Hub.unsub('channel_1', handler_1b);
       };
 
       var handler_1b = function () {
         console.log('channel_1b');
       };
 
-      var handler_2 = function () {
-        console.log('channel_2');
-      };
-
-      var handler_3 = function () {
-        console.log('channel_3');
-      };
-
-      var handler_4a = function () {
-        console.log('channel_4a');
-      };
-
-      var handler_4b = function () {
-        console.log('channel_4b');
-      };
-
       Hub.sub('channel_1', handler_1a);
       Hub.sub('channel_1', handler_1b);
-      Hub.sub('channel_2', handler_2);
-      Hub.sub('channel_3', handler_3);
-      Hub.sub('channel_4', handler_4a);
-      Hub.sub('channel_4', handler_4b);
-
-      Hub.unsub('channel_1', handler_1a);
-      Hub.unsub('channel_1', handler_1a); // repeated unsub
-      Hub.unsub('channel_2', handler_1a); // wrong handler
-      Hub.unsub('channel_4'); // unsub all
 
       Hub.pub('channel_1');
-      Hub.pub('channel_2');
-      Hub.pub('channel_3');
-      Hub.pub('channel_4');
-
-//      expect(__log.length).toBe(3);
-//      expect(__log[0]).toBe('channel_1b');
-//      expect(__log[1]).toBe('channel_2');
-//      expect(__log[2]).toBe('channel_3');
+      Hub.pub('channel_1');
     </script>
   </head>
   <body>

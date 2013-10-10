@@ -34,9 +34,7 @@
   
     while (++i < l) {
       subscriber = subscribers[i];
-      if (subscriber !== undefined) {
-        subscriber.handler.apply(subscriber.context, arguments);
-      }
+      subscriber.handler.apply(subscriber.context, arguments);
     }
   
     return this;
@@ -71,15 +69,16 @@
     var subscriber;
     var l = subscribers.length;
     var i = -1;
+    var retain = [];
   
     if (handler !== undefined) {
       while (++i < l) {
         subscriber = subscribers[i];
-        if (subscriber !== undefined && subscriber.handler === handler) {
-          subscribers[i] = undefined;
-          return this;
+        if (subscriber.handler !== handler) {
+          retain.push(subscriber);
         }
       }
+      subscriptions[channel] = retain;
     } else {
       subscriptions[channel].length = 0;
     }
