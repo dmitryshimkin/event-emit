@@ -86,11 +86,11 @@
 
       // 2.4 multiple
       it('should work with multiple channels', function () {
-        Hub.sub('channel_1 channel2', function () {
+        Hub.sub('channel_1 channel_2', function () {
           __log.push('handler_1');
         });
 
-        Hub.sub(' channel_2   channel3 ', function () {
+        Hub.sub(' channel_2   channel_3 ', function () {
           __log.push('handler_2');
         });
 

@@ -1,5 +1,5 @@
 var subscriptions = {};
-
+var rSplit = /\s+/;
 var clean = function () {
   //
 };
@@ -11,8 +11,8 @@ var clean = function () {
 
 var Hub = {};
 
-Hub['pub'] = function (msg) {
-  var subscribers = subscriptions[msg] || [];
+Hub['pub'] = function (channel) {
+  var subscribers = subscriptions[channel] || [];
   var subscriber;
   var l = subscribers.length;
   var i = -1;
@@ -32,17 +32,27 @@ Hub['reset'] = function () {
   return this;
 };
 
-Hub['sub'] =  function (msg, handler, context) {
-  subscriptions[msg] = subscriptions[msg] || [];
-  subscriptions[msg].push({
-    handler: handler,
-    context: context
-  });
+Hub['sub'] =  function (channels, handler, context) {
+  channels = trim(channels).split(rSplit);
+
+  var channel;
+  var l = channels.length;
+  var i = -1;
+
+  while (++i < l) {
+    channel = channels[i];
+    subscriptions[channel] = subscriptions[channel] || [];
+    subscriptions[channel].push({
+      handler: handler,
+      context: context
+    });
+  }
+
   return this;
 };
 
-Hub['unsub'] = function (msg, handler) {
-  var subscribers = subscriptions[msg] || [];
+Hub['unsub'] = function (channel, handler) {
+  var subscribers = subscriptions[channel] || [];
   var subscriber;
   var l = subscribers.length;
   var i = -1;

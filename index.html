@@ -6,6 +6,23 @@
     <script src="src/lang/trim.js"></script>
     <script src="src/hub.js"></script>
     <script>
+      Hub.sub('channel_1 channel_2', function () {
+        console.log('handler_1');
+      });
+
+      Hub.sub(' channel_2   channel_3 ', function () {
+        console.log('handler_2');
+      });
+
+      Hub.pub('channel_1');
+      Hub.pub('channel_2');
+      Hub.pub('channel_3');
+
+//      expect(__log.length).toBe(4);
+//      expect(__log[0]).toBe('handler_1');
+//      expect(__log[1]).toBe('handler_1');
+//      expect(__log[2]).toBe('handler_2');
+//      expect(__log[3]).toBe('handler_2');
     </script>
   </head>
   <body>
