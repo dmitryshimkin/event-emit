@@ -11,15 +11,26 @@ var clean = function () {
 
 var Hub = {};
 
-Hub['pub'] = function (channel) {
-  var subscribers = subscriptions[channel] || [];
-  var subscriber;
-  var l = subscribers.length;
+Hub['pub'] = function (channels) {
+  channels = trim(channels).split(rSplit);
+
+  var channelsCount = channels.length;
+  var channel;
   var i = -1;
 
-  while (++i < l) {
-    subscriber = subscribers[i];
-    subscriber.handler.apply(subscriber.context, arguments);
+  var j, subscribers, subscriber, subscribersCount;
+
+  while (++i < channelsCount) {
+    channel = channels[i];
+
+    subscribers = subscriptions[channel] || [];
+    subscribersCount = subscribers.length;
+    j = -1;
+
+    while (++j < subscribersCount) {
+      subscriber = subscribers[j];
+      subscriber.handler.apply(subscriber.context, arguments);
+    }
   }
 
   return this;
@@ -33,11 +44,11 @@ Hub['reset'] = function () {
 Hub['sub'] =  function (channels, handler, context) {
   channels = trim(channels).split(rSplit);
 
+  var channelsCount = channels.length;
   var channel;
-  var l = channels.length;
   var i = -1;
 
-  while (++i < l) {
+  while (++i < channelsCount) {
     channel = channels[i];
     subscriptions[channel] = subscriptions[channel] || [];
     subscriptions[channel].push({
@@ -53,16 +64,20 @@ Hub['unsub'] = function (channels, handler) {
   channels = trim(channels).split(rSplit);
 
   var channelsCount = channels.length;
-  var channel, subscribers, subscriber, subscribersCount, j, retain;
+  var channel;
   var i = -1;
+
+  var j, subscribers, subscriber, subscribersCount;
+  var retain;
 
   while (++i < channelsCount) {
     channel = channels[i];
 
     subscribers = subscriptions[channel] || [];
     subscribersCount = subscribers.length;
-    retain = [];
     j = -1;
+
+    retain = [];
 
     if (handler !== undefined) {
       while (++j < subscribersCount) {

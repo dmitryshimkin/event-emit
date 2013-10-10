@@ -183,7 +183,7 @@
     <h1>Code coverage report for <span class="entity">build/hub.test.js</span></h1>
     <h2>
         
-        Statements: <span class="metric">94.64% <small>(53 / 56)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Statements: <span class="metric">95.31% <small>(61 / 64)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
         Branches: <span class="metric">70% <small>(14 / 20)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
@@ -192,7 +192,7 @@
         Functions: <span class="metric">75% <small>(6 / 8)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
-        Lines: <span class="metric">94.64% <small>(53 / 56)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Lines: <span class="metric">95.31% <small>(61 / 64)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
     </h2>
     <div class="path"><a href="../index.html">All files</a> &#187; <a href="index.html">build/</a> &#187; hub.test.js</div>
@@ -310,7 +310,22 @@
 109
 110
 111
-112</td><td class="line-coverage"><span class="cline-any cline-yes">1</span>
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127</td><td class="line-coverage"><span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -321,7 +336,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">46</span>
+<span class="cline-any cline-yes">76</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
@@ -340,13 +355,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-yes">30</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">30</span>
 <span class="cline-any cline-yes">30</span>
 <span class="cline-any cline-yes">30</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">30</span>
-<span class="cline-any cline-yes">26</span>
-<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">30</span>
+<span class="cline-any cline-yes">34</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">34</span>
+<span class="cline-any cline-yes">34</span>
+<span class="cline-any cline-yes">34</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">34</span>
+<span class="cline-any cline-yes">32</span>
+<span class="cline-any cline-yes">32</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">30</span>
@@ -384,11 +410,15 @@
 <span class="cline-any cline-yes">8</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">8</span>
+<span class="cline-any cline-yes">8</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8</span>
 <span class="cline-any cline-yes">9</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9</span>
 <span class="cline-any cline-yes">9</span>
 <span class="cline-any cline-yes">9</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9</span>
@@ -449,15 +479,26 @@
   
   var Hub = {};
   
-  Hub['pub'] = function (channel) {
-    var subscribers = subscriptions[channel] || [];
-    var subscriber;
-    var l = subscribers.length;
+  Hub['pub'] = function (channels) {
+    channels = trim(channels).split(rSplit);
+  
+    var channelsCount = channels.length;
+    var channel;
     var i = -1;
   
-    while (++i &lt; l) {
-      subscriber = subscribers[i];
-      subscriber.handler.apply(subscriber.context, arguments);
+    var j, subscribers, subscriber, subscribersCount;
+  
+    while (++i &lt; channelsCount) {
+      channel = channels[i];
+  
+      subscribers = subscriptions[channel] || [];
+      subscribersCount = subscribers.length;
+      j = -1;
+  
+      while (++j &lt; subscribersCount) {
+        subscriber = subscribers[j];
+        subscriber.handler.apply(subscriber.context, arguments);
+      }
     }
   
     return this;
@@ -471,11 +512,11 @@
   Hub['sub'] =  function (channels, handler, context) {
     channels = trim(channels).split(rSplit);
   
+    var channelsCount = channels.length;
     var channel;
-    var l = channels.length;
     var i = -1;
   
-    while (++i &lt; l) {
+    while (++i &lt; channelsCount) {
       channel = channels[i];
       subscriptions[channel] = subscriptions[channel] || [];
       subscriptions[channel].push({
@@ -491,16 +532,20 @@
     channels = trim(channels).split(rSplit);
   
     var channelsCount = channels.length;
-    var channel, subscribers, subscriber, subscribersCount, j, retain;
+    var channel;
     var i = -1;
+  
+    var j, subscribers, subscriber, subscribersCount;
+    var retain;
   
     while (++i &lt; channelsCount) {
       channel = channels[i];
   
       subscribers = subscriptions[channel] || <span class="branch-1 cbranch-no" title="branch not covered" >[];</span>
       subscribersCount = subscribers.length;
-      retain = [];
       j = -1;
+  
+      retain = [];
   
       if (handler !== undefined) {
         while (++j &lt; subscribersCount) {
@@ -537,7 +582,7 @@
 
 </div>
 <div class="footer">
-    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Oct 10 2013 17:14:29 GMT+0400 (MSK)</div>
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Oct 10 2013 17:28:28 GMT+0400 (MSK)</div>
 </div>
 
 <script src="../prettify.js"></script>
