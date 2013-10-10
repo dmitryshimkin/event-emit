@@ -74,10 +74,11 @@
         expect(__log.length).toBe(1);
         expect(__log[0]).toBe('channel_1a');
 
+        __log = [];
+
         Hub.pub('channel_1');
 
-        expect(__log.length).toBe(3);
-        expect(__log[0]).toBe('channel_1a');
+        expect(__log.length).toBe(2);
         expect(__log[1]).toBe('channel_1a');
         expect(__log[2]).toBe('channel_1b');
       });
@@ -86,7 +87,7 @@
       it('should be possible to pass context for listener', function () {
         var obj = {
           foo: 'bar',
-          getFoo: function () {
+          method: function () {
             __log.push(this.foo);
           }
         };
@@ -100,7 +101,23 @@
 
       // 2.5 multiple
       it('should work with multiple channels', function () {
+        Hub.sub('channel_1 channel2', function () {
+          __log.push('handler_1');
+        });
 
+        Hub.sub(' channel_2   channel3 ', function () {
+          __log.push('handler_2');
+        });
+
+        Hub.pub('channel_1');
+        Hub.pub('channel_2');
+        Hub.pub('channel_3');
+
+        expect(__log.length).toBe(4);
+        expect(__log[0]).toBe('handler_1');
+        expect(__log[1]).toBe('handler_1');
+        expect(__log[2]).toBe('handler_2');
+        expect(__log[3]).toBe('handler_2');
       });
 
       // 2.6 namespace
@@ -138,6 +155,27 @@
         expect(__log[6]).toBe('channel');
       });
 
+      // 2.7 warn
+      it('should warn on attempt to subscribe with empty channel name', function() {
+        console.warn = function () {
+          __log.push('warning');
+        };
+
+        Hub.sub();
+        Hub.sub('');
+        Hub.sub('  ');
+        Hub.sub(1);
+        Hub.sub(null);
+        Hub.sub(undefined);
+
+        expect(__log.length).toBe(6);
+        expect(__log[0]).toBe('warning');
+        expect(__log[1]).toBe('warning');
+        expect(__log[2]).toBe('warning');
+        expect(__log[3]).toBe('warning');
+        expect(__log[4]).toBe('warning');
+        expect(__log[5]).toBe('warning');
+      });
     });
 
     // 3. Unsubscribe
@@ -217,7 +255,32 @@
 
       // 3.3 multiple
       it('should support multiple channels', function () {
-        //
+        Hub.sub('channel_1', function () {
+          __log.push('channel_1');
+        });
+
+        Hub.sub('channel_2', function () {
+          __log.push('channel_2');
+        });
+
+        Hub.sub('channel_3', function () {
+          __log.push('channel_3');
+        });
+
+        Hub.sub('channel_4', function () {
+          __log.push('channel_4');
+        });
+
+        Hub.unsub('  channel_1    channel_3');
+
+        Hub.pub('channel_1');
+        Hub.pub('channel_2');
+        Hub.pub('channel_3');
+        Hub.pub('channel_4');
+
+        expect(__log.length).toBe(2);
+        expect(__log[0]).toBe('channel_2');
+        expect(__log[1]).toBe('channel_4');
       });
 
       // 3.4 namespace
@@ -231,6 +294,8 @@
 
       // 4.1 order
       it('should notify subscribers in proper order', function () {
+        Hub.pub('channel');
+
         Hub.sub('channel', function (msg) {
           __log.push('0');
         });
@@ -241,43 +306,117 @@
 
         Hub.pub('channel');
 
-        expect(__log.length).toBe(3);
+        expect(__log.length).toBe(2);
         expect(__log[0]).toBe(0);
         expect(__log[1]).toBe(1);
       });
 
-      // 4.2 channel name as argument
-      it('should pass channel name as a first argument', function () {
-        Hub.sub('channel_1', function (channel) {
-          __log.push(channel);
+      // 4.2 multiple
+      it('should support multiple channels', function () {
+        Hub.sub('channel_1', function () {
+          __log.push('channel_1');
         });
 
-        Hub.pub('channel_1');
+        Hub.sub('channel_2', function () {
+          __log.push('channel_2');
+        });
 
-        // @TODO: check with namespace
-        // @TODO: check with multiple channels
+        Hub.sub('channel_3', function () {
+          __log.push('channel_3');
+        });
+
+        Hub.sub('channel_4', function () {
+          __log.push('channel_4');
+        });
+
+        Hub.pub(' channel_2  channel_1  channel_4 ');
+
+        expect(__log.length).toBe(3);
+        expect(__log[0]).toBe('channel_2');
+        expect(__log[1]).toBe('channel_1');
+        expect(__log[2]).toBe('channel_4');
+      });
+
+      // 4.3 channel name as argument
+      it('should pass channel name as a first argument', function () {
+        var handler = function (channel) {
+          __log.push(channel);
+        };
+
+        Hub.sub('channel_1', handler);
+        Hub.pub('channel_1');
 
         expect(__log.length).toBe(0);
         expect(__log[0]).toBe('channel_1');
+
+        __log = [];
+
+        Hub.sub('channel_2', handler);
+        Hub.sub('channel_2/ns1', handler);
+        Hub.sub('channel_2/ns2', handler);
+
+        Hub.pub('channel_2/ns1');
+        Hub.pub('channel_2/ns2');
+        Hub.pub('channel_2');
+
+        expect(__log.length).toBe(5);
+        expect(__log[0]).toBe('channel_2/ns1');
+        expect(__log[1]).toBe('channel_2/ns1');
+        expect(__log[2]).toBe('channel_2/ns2');
+        expect(__log[3]).toBe('channel_2/ns2');
+        expect(__log[4]).toBe('channel_2');
+
+        __log = [];
+
+        Hub.sub('channel_3', handler);
+        Hub.sub('channel_4', handler);
+        Hub.sub('channel_5', handler);
+
+        Hub.pub('channel_3 channel_5 channel_4');
+
+        expect(__log.length).toBe(3);
+        expect(__log[0]).toBe('channel_3');
+        expect(__log[1]).toBe('channel_4');
+        expect(__log[2]).toBe('channel_5');
       });
 
-      // 4.3 data
+      // 4.4 data
       it('should be possible pass data to publication', function () {
         var data = { foo: 'bar' };
+        var moreData = 'data string';
 
-        Hub.sub('channel_1', function (msg, data) {
+        Hub.sub('channel_1', function (msg, data, moreData) {
           __log.push(data);
+          __log.push(moreData);
         });
 
-        Hub.pub('channel_1', data);
+        Hub.pub('channel_1', data, moreData);
 
-        expect(__log.length).toBe(0);
+        expect(__log.length).toBe(2);
         expect(__log[0]).toBe(data);
+        expect(__log[1]).toBe(moreData);
       });
 
-      // 4.4 multiple
-      it('should support multiple channels', function () {
-        //
+      // 4.5 warning
+      it('should warn on attempt to publish with empty channel name', function() {
+        console.warn = function () {
+          __log.push('warning');
+        };
+
+        Hub.pub();
+        Hub.pub('');
+        Hub.pub('  ');
+        Hub.pub(1);
+        Hub.pub(null);
+        Hub.pub(undefined);
+
+        expect(__log.length).toBe(6);
+        expect(__log[0]).toBe('warning');
+        expect(__log[1]).toBe('warning');
+        expect(__log[2]).toBe('warning');
+        expect(__log[3]).toBe('warning');
+        expect(__log[4]).toBe('warning');
+        expect(__log[5]).toBe('warning');
       });
     });
 
@@ -285,7 +424,7 @@
     describe('reset', function () {
 
       // 5.1 clear
-      it('should reset all subscriptions', function () {
+      it('should remove all subscriptions', function () {
         Hub.sub('channel_1', function () {
           __log.push('channel_1');
         });
