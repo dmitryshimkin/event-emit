@@ -1,4 +1,6 @@
 node_modules
+build/hub.test.js
+_SpecRunner.html
 .DS_store
 .grunt
 .idea
