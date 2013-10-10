@@ -1,31 +1,59 @@
+var subscriptions = {};
+
+var clean = function () {
+  //
+};
+
 /**
  * Hub
+ * @public
  */
 
-var Hub = (function (undefined) {
-  var console = window.console;
-  var subscribers = {};
-  var api = {};
+var Hub = {};
 
-  api['pub'] = function (msg) {
-    console.log(msg);
-    return this;
-  };
+Hub['pub'] = function (msg) {
+  var subscribers = subscriptions[msg] || [];
+  var subscriber;
+  var l = subscribers.length;
+  var i = -1;
 
-  api['reset'] = function () {
-    subscribers = {};
-    return this;
-  };
+  while (++i < l) {
+    subscriber = subscribers[i];
+    if (subscriber !== undefined) {
+      subscriber.handler.apply(subscriber.context, arguments);
+    }
+  }
 
-  api['sub'] =  function (msg, handler, context) {
-    console.log(msg, handler, context);
-    return this;
-  };
+  return this;
+};
 
-  api['unsub'] = function (msg, handler) {
-    console.log(msg, handler);
-    return this;
-  };
+Hub['reset'] = function () {
+  subscriptions = {};
+  return this;
+};
 
-  return api;
-}());
+Hub['sub'] =  function (msg, handler, context) {
+  subscriptions[msg] = subscriptions[msg] || [];
+  subscriptions[msg].push({
+    handler: handler,
+    context: context
+  });
+  return this;
+};
+
+Hub['unsub'] = function (msg, handler) {
+  var subscribers = subscriptions[msg] || [];
+  var subscriber;
+  var l = subscribers.length;
+  var i = -1;
+
+  while (++i < l) {
+    subscriber = subscribers[i];
+    if (subscriber !== undefined && subscriber.handler === handler) {
+      subscribers[i] = undefined;
+      return this;
+    }
+  }
+
+  return this;
+};

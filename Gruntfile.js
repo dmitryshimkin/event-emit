@@ -1,6 +1,12 @@
 module.exports = function (grunt) {
   'use strict';
 
+  var source = [
+    'src/lang/trim.js',
+    'src/hub.js',
+    'src/export.js'
+  ];
+
   grunt.initConfig({
     clean: {
       test: ['build/hub.test.js']
@@ -9,17 +15,12 @@ module.exports = function (grunt) {
     concat: {
       dev: {
         files: {
-          'build/hub.js': [
-            'src/hub.js',
-            'src/export.js'
-          ]
+          'build/hub.js': source
         }
       },
       test: {
         files: {
-          'build/hub.test.js': [
-            'src/hub.js'
-          ]
+          'build/hub.test.js': source
         }
       }
     },
@@ -101,8 +102,19 @@ module.exports = function (grunt) {
     },
 
     wrap: {
-      all: {
+      dev: {
         src: 'build/hub.js',
+        dest: '',
+        options: {
+          indent: '  ',
+          wrapper: [
+            '(function () {\n  \'use strict\';\n',
+            '\n}());'
+          ]
+        }
+      },
+      test: {
+        src: 'build/hub.test.js',
         dest: '',
         options: {
           indent: '  ',
@@ -124,8 +136,8 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-wrap');
 
   // build
-  grunt.registerTask('build-dev', ['concat:dev', 'wrap']);
-  grunt.registerTask('build-test', ['concat:test', 'wrap']);
+  grunt.registerTask('build-dev', ['concat:dev', 'wrap:dev']);
+  grunt.registerTask('build-test', ['concat:test', 'wrap:test']);
   grunt.registerTask('build-prod', ['build-dev', 'uglify:compress']);
 
   // test

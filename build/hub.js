@@ -2,36 +2,76 @@
   'use strict';
 
   /**
-   * Hub
+   * Trim string
+   * @param str {String} String to be trimmed
+   * @return {String} Trimmed string
+   * @private
    */
   
-  var Hub = (function (undefined) {
-    var console = window.console;
-    var subscribers = {};
-    var api = {};
+  var trim = function (str) {
+    return str.replace(trim.reg, '');
+  };
   
-    api['pub'] = function (msg) {
-      console.log(msg);
-      return this;
-    };
+  trim.reg = /^\s+|\s+$/g;
+  var subscriptions = {};
   
-    api['reset'] = function () {
-      subscribers = {};
-      return this;
-    };
+  var clean = function () {
+    //
+  };
   
-    api['sub'] =  function (msg, handler, context) {
-      console.log(msg, handler, context);
-      return this;
-    };
+  var Hub = {};
   
-    api['unsub'] = function (msg, handler) {
-      console.log(msg, handler);
-      return this;
-    };
+  /**
+   * Hub
+   * @public
+   */
   
-    return api;
-  }());
+  Hub['pub'] = function (msg) {
+    var subscribers = subscriptions[msg] || [];
+    var subscriber;
+    var l = subscribers.length;
+    var i = -1;
+  
+    while (++i < l) {
+      subscriber = subscribers[i];
+      if (subscriber !== undefined) {
+        subscriber.handler.apply(subscriber.context, arguments);
+      }
+    }
+  
+    return this;
+  };
+  
+  Hub['reset'] = function () {
+    subscriptions = {};
+    return this;
+  };
+  
+  Hub['sub'] =  function (msg, handler, context) {
+    subscriptions[msg] = subscriptions[msg] || [];
+    subscriptions[msg].push({
+      handler: handler,
+      context: context
+    });
+    return this;
+  };
+  
+  Hub['unsub'] = function (msg, handler) {
+    var subscribers = subscriptions[msg] || [];
+    var subscriber;
+    var l = subscribers.length;
+    var i = -1;
+  
+    while (++i < l) {
+      subscriber = subscribers[i];
+      if (subscriber !== undefined && subscriber.handler === handler) {
+        subscribers[i] = undefined;
+        return this;
+      }
+    }
+  
+    return this;
+  };
   
   /**
    * Export
