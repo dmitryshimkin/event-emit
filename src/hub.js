@@ -1,5 +1,6 @@
 var subscriptions = {};
 var rSplit = /\s+/;
+var slice = Array.prototype.slice;
 var clean = function () {
   //
 };
@@ -13,6 +14,8 @@ var Hub = {};
 
 Hub['pub'] = function (channels) {
   channels = trim(channels).split(rSplit);
+
+  var args = slice.call(arguments);
 
   var channelsCount = channels.length;
   var channel;
@@ -28,8 +31,9 @@ Hub['pub'] = function (channels) {
     j = -1;
 
     while (++j < subscribersCount) {
+      args[0] = channel;
       subscriber = subscribers[j];
-      subscriber.handler.apply(subscriber.context, arguments);
+      subscriber.handler.apply(subscriber.context, args);
     }
   }
 

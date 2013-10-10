@@ -104,41 +104,6 @@
         expect(__log[2]).toBe('handler_2');
         expect(__log[3]).toBe('handler_2');
       });
-
-      // 2.5 namespace
-      xit('should work with namespace', function () {
-        Hub.sub('channel', function (msg) {
-          __log.push('channel');
-        });
-
-        Hub.sub('channel/ns1', function (msg) {
-          __log.push('channel/ns1');
-        });
-
-        Hub.sub('channel/ns1/ns2', function () {
-          __log.push('channel/ns1/ns2');
-        });
-
-        Hub.sub('channel/', function (msg) {
-          __log.push('channel');
-        });
-
-        Hub.pub('channel/ns1/ns2');
-        Hub.pub('channel/ns1');
-        Hub.pub('channel');
-
-        expect(__log.length).toBe(7);
-
-        expect(__log[0]).toBe('channel/ns1/ns2');
-
-        expect(__log[1]).toBe('channel/ns1');
-        expect(__log[2]).toBe('channel/ns1/ns2');
-
-        expect(__log[3]).toBe('channel');
-        expect(__log[4]).toBe('channel/ns1');
-        expect(__log[5]).toBe('channel/ns1/ns2');
-        expect(__log[6]).toBe('channel');
-      });
     });
 
     // 3. Unsubscribe
@@ -245,11 +210,6 @@
         expect(__log[0]).toBe('channel_2');
         expect(__log[1]).toBe('channel_4');
       });
-
-      // 3.4 namespace
-      xit('should support namespaces', function () {
-        //
-      });
     });
 
     // 4. Publish
@@ -309,25 +269,8 @@
         Hub.sub('channel_1', handler);
         Hub.pub('channel_1');
 
-        expect(__log.length).toBe(0);
+        expect(__log.length).toBe(1);
         expect(__log[0]).toBe('channel_1');
-
-        __log = [];
-
-        Hub.sub('channel_2', handler);
-        Hub.sub('channel_2/ns1', handler);
-        Hub.sub('channel_2/ns2', handler);
-
-        Hub.pub('channel_2/ns1');
-        Hub.pub('channel_2/ns2');
-        Hub.pub('channel_2');
-
-        expect(__log.length).toBe(5);
-        expect(__log[0]).toBe('channel_2/ns1');
-        expect(__log[1]).toBe('channel_2/ns1');
-        expect(__log[2]).toBe('channel_2/ns2');
-        expect(__log[3]).toBe('channel_2/ns2');
-        expect(__log[4]).toBe('channel_2');
 
         __log = [];
 
@@ -339,8 +282,8 @@
 
         expect(__log.length).toBe(3);
         expect(__log[0]).toBe('channel_3');
-        expect(__log[1]).toBe('channel_4');
-        expect(__log[2]).toBe('channel_5');
+        expect(__log[1]).toBe('channel_5');
+        expect(__log[2]).toBe('channel_4');
       });
 
       // 4.4 data
