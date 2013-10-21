@@ -43,7 +43,7 @@ Hub['reset'] = function () {
   return this;
 };
 
-Hub['sub'] =  function (messages, handler, context) {
+Hub['sub'] = function (messages, handler, context) {
   messages = trim(messages).split(rSplit);
 
   var messagesCount = messages[length];
