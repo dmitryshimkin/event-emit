@@ -1,16 +1,11 @@
+/** Export */
 
-/**
- * Export
- */
-
-var obj = 'object';
-
-if (typeof module === obj && typeof module.exports === obj) {
+if (typeof module === 'object' && typeof module.exports === 'object') {
   module.exports = Hub;
 } else if (typeof define === 'function' && define.amd) {
   define('Hub', [], function () {
     return Hub;
   });
-} else if (typeof window === obj) {
+} else if (typeof window === 'object') {
   window['Hub'] = Hub;
 }

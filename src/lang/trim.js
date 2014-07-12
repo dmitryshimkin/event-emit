@@ -2,11 +2,11 @@
  * Trim string
  * @param str {String} String to be trimmed
  * @return {String} Trimmed string
- * @private
+ * @public
  */
 
-var trim = function (str) {
-  return str.replace(trim.r, '');
+Lang.trim = function (str) {
+  return str.replace(Lang.trim.r, '');
 };
 
-trim.r = /^\s+|\s+$/g;
+Lang.trim.r = /^\s+|\s+$/g;

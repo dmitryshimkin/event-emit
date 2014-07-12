@@ -10,6 +10,7 @@ module.exports = function (grunt) {
       dev: {
         files: {
           'build/hub.js': [
+            'src/lang/Lang.js',
             'src/lang/trim.js',
             'src/hub.js',
             'src/export.js'
@@ -19,6 +20,7 @@ module.exports = function (grunt) {
       test: {
         files: {
           'build/hub.test.js': [
+            'src/lang/Lang.js',
             'src/lang/trim.js',
             'src/hub.js'
           ]

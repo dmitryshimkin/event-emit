@@ -11,7 +11,7 @@ var length = 'length';
 var Hub = {};
 
 Hub['pub'] = function (messages) {
-  messages = trim(messages).split(rSplit);
+  messages = Lang.trim(messages).split(rSplit);
 
   var args = slice.call(arguments);
 
@@ -44,7 +44,7 @@ Hub['reset'] = function () {
 };
 
 Hub['sub'] = function (messages, handler, context) {
-  messages = trim(messages).split(rSplit);
+  messages = Lang.trim(messages).split(rSplit);
 
   var messagesCount = messages[length];
   var message;
@@ -63,15 +63,27 @@ Hub['sub'] = function (messages, handler, context) {
   return this;
 };
 
-Hub['unsub'] = function (messages, handler) {
-  messages = trim(messages).split(rSplit);
+/**
+ * Removes subscription
+ * @param messages {String}
+ * @param handler {Function}
+ * @param [ctx] {Object}
+ * @returns {Hub}
+ */
+
+Hub['unsub'] = function (messages, handler, ctx) {
+  messages = Lang.trim(messages).split(rSplit);
 
   var messagesCount = messages[length];
   var message;
   var i = -1;
-
-  var j, subscribers, subscriber, subscribersCount;
+  var j;
+  var subscribers;
+  var subscriber;
+  var subscribersCount;
   var retain;
+  var checkHandler = handler !== undefined;
+  var checkContext = ctx !== undefined;
 
   while (++i < messagesCount) {
     message = messages[i];
@@ -82,17 +94,23 @@ Hub['unsub'] = function (messages, handler) {
 
     retain = [];
 
-    if (handler !== undefined) {
-      while (++j < subscribersCount) {
-        subscriber = subscribers[j];
-        if (subscriber.fn !== handler) {
+    if (!checkHandler) {
+      subscriptions[message] = [];
+      continue;
+    }
+
+    while (++j < subscribersCount) {
+      subscriber = subscribers[j];
+      if (checkContext) {
+        if (subscriber.fn !== handler || subscriber.ctx !== ctx) {
           retain.push(subscriber);
         }
+      } else if (subscriber.fn !== handler) {
+        retain.push(subscriber);
       }
-      subscriptions[message] = retain;
-    } else {
-      subscriptions[message] = [];
     }
+
+    subscriptions[message] = retain;
   }
 
   return this;
