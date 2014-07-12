@@ -1,18 +1,21 @@
 (function (undefined) {
   'use strict';
 
+  var Lang = {};
+  
   /**
    * Trim string
    * @param str {String} String to be trimmed
    * @return {String} Trimmed string
-   * @private
+   * @public
    */
   
-  var trim = function (str) {
-    return str.replace(trim.r, '');
+  Lang.trim = function (str) {
+    return str.replace(Lang.trim.r, '');
   };
   
-  trim.r = /^\s+|\s+$/g;
+  Lang.trim.r = /^\s+|\s+$/g;
+  
   var subscriptions = {};
   var rSplit = /\s+/;
   var slice = Array.prototype.slice;
@@ -26,7 +29,7 @@
   var Hub = {};
   
   Hub['pub'] = function (messages) {
-    messages = trim(messages).split(rSplit);
+    messages = Lang.trim(messages).split(rSplit);
   
     var args = slice.call(arguments);
   
@@ -58,8 +61,8 @@
     return this;
   };
   
-  Hub['sub'] =  function (messages, handler, context) {
-    messages = trim(messages).split(rSplit);
+  Hub['sub'] = function (messages, handler, context) {
+    messages = Lang.trim(messages).split(rSplit);
   
     var messagesCount = messages[length];
     var message;
@@ -78,15 +81,27 @@
     return this;
   };
   
-  Hub['unsub'] = function (messages, handler) {
-    messages = trim(messages).split(rSplit);
+  /**
+   * Removes subscription
+   * @param messages {String}
+   * @param handler {Function}
+   * @param [ctx] {Object}
+   * @returns {Hub}
+   */
+  
+  Hub['unsub'] = function (messages, handler, ctx) {
+    messages = Lang.trim(messages).split(rSplit);
   
     var messagesCount = messages[length];
     var message;
     var i = -1;
-  
-    var j, subscribers, subscriber, subscribersCount;
+    var j;
+    var subscribers;
+    var subscriber;
+    var subscribersCount;
     var retain;
+    var checkHandler = handler !== undefined;
+    var checkContext = ctx !== undefined;
   
     while (++i < messagesCount) {
       message = messages[i];
@@ -97,36 +112,38 @@
   
       retain = [];
   
-      if (handler !== undefined) {
-        while (++j < subscribersCount) {
-          subscriber = subscribers[j];
-          if (subscriber.fn !== handler) {
+      if (!checkHandler) {
+        subscriptions[message] = [];
+        continue;
+      }
+  
+      while (++j < subscribersCount) {
+        subscriber = subscribers[j];
+        if (checkContext) {
+          if (subscriber.fn !== handler || subscriber.ctx !== ctx) {
             retain.push(subscriber);
           }
+        } else if (subscriber.fn !== handler) {
+          retain.push(subscriber);
         }
-        subscriptions[message] = retain;
-      } else {
-        subscriptions[message] = [];
       }
+  
+      subscriptions[message] = retain;
     }
   
     return this;
   };
+  /** Export */
   
-  /**
-   * Export
-   */
-  
-  var obj = 'object';
-  
-  if (typeof module === obj && typeof module.exports === obj) {
+  if (typeof module === 'object' && typeof module.exports === 'object') {
     module.exports = Hub;
   } else if (typeof define === 'function' && define.amd) {
     define('Hub', [], function () {
       return Hub;
     });
-  } else if (typeof window === obj) {
+  } else if (typeof window === 'object') {
     window['Hub'] = Hub;
   }
+  
 
 }());

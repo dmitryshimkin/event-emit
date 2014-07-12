@@ -3,13 +3,13 @@ module.exports = function (grunt) {
 
   grunt.initConfig({
     clean: {
-      test: ['build/hub.test.js']
+      test: ['dist/hub.test.js']
     },
 
     concat: {
       dev: {
         files: {
-          'build/hub.js': [
+          'dist/hub.js': [
             'src/lang/Lang.js',
             'src/lang/trim.js',
             'src/hub.js',
@@ -19,7 +19,7 @@ module.exports = function (grunt) {
       },
       test: {
         files: {
-          'build/hub.test.js': [
+          'dist/hub.test.js': [
             'src/lang/Lang.js',
             'src/lang/trim.js',
             'src/hub.js'
@@ -30,7 +30,7 @@ module.exports = function (grunt) {
 
     jasmine: {
       dev: {
-        src: 'build/hub.test.js',
+        src: 'dist/hub.test.js',
         options: {
           specs: 'test/spec/hub.spec.js',
           template: require('grunt-template-jasmine-istanbul'),
@@ -48,7 +48,7 @@ module.exports = function (grunt) {
         }
       },
       prod: {
-        src: 'build/hub.min.js',
+        src: 'dist/hub.min.js',
         options: {
           specs: [
             'test/spec/hub.spec.js'
@@ -72,7 +72,7 @@ module.exports = function (grunt) {
     jshint: {
       all: [
         'Gruntfile.js',
-        'build/hub.js'
+        'dist/hub.js'
       ],
       options: {
         jshintrc: '.jshintrc'
@@ -84,8 +84,8 @@ module.exports = function (grunt) {
     uglify: {
       compress: {
         files: {
-          'build/hub.min.js': [
-            'build/hub.js'
+          'dist/hub.min.js': [
+            'dist/hub.js'
           ]
         },
         options: {
@@ -98,14 +98,14 @@ module.exports = function (grunt) {
           ].join('\n'),
           mangle: true,
           report: 'gzip'
-          //sourceMap: 'build/hub_sourcemap'
+          //sourceMap: 'dist/hub_sourcemap'
         }
       }
     },
 
     wrap: {
       dev: {
-        src: 'build/hub.js',
+        src: 'dist/hub.js',
         dest: '',
         options: {
           indent: '  ',
@@ -116,7 +116,7 @@ module.exports = function (grunt) {
         }
       },
       test: {
-        src: 'build/hub.test.js',
+        src: 'dist/hub.test.js',
         dest: '',
         options: {
           indent: '  ',
