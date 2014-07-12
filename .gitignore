@@ -1,5 +1,5 @@
 node_modules
-build/hub.test.js
+dist/hub.test.js
 test/report
 _SpecRunner.html
 .DS_store

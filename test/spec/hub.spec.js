@@ -243,6 +243,26 @@
         expect(__log.length).toBe(1);
         expect(__log[0]).toBe('2');
       });
+
+      // 3.5 the same handler
+      it('equal handlers', function () {
+        var handler = function () {
+          __log.push('ok');
+        };
+
+        Hub.sub('event', handler);
+        Hub.sub('event', handler);
+        Hub.pub('event');
+
+        expect(__log.length).toBe(2);
+
+        __log.length = 0;
+
+        Hub.unsub('event', handler);
+        Hub.pub('event');
+
+        expect(__log.length).toBe(1);
+      });
     });
 
     // 4. Publish
