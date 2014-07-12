@@ -212,6 +212,37 @@
         expect(__log[0]).toBe('message_2');
         expect(__log[1]).toBe('message_4');
       });
+
+      // 3.4 context
+      it('should remove subscription by handler and context', function () {
+        var handler = function () {
+          __log.push(this.id);
+        };
+        var ctx1 = {
+          id: '1'
+        };
+        var ctx2 = {
+          id: '2'
+        };
+
+        Hub.sub('message', handler, ctx1);
+        Hub.sub('message', handler, ctx2);
+
+        Hub.pub('message');
+
+        expect(__log.length).toBe(2);
+        expect(__log[0]).toBe('1');
+        expect(__log[1]).toBe('2');
+
+        Hub.unsub('message', handler, ctx1);
+
+        __log.length = 0;
+
+        Hub.pub('message');
+
+        expect(__log.length).toBe(1);
+        expect(__log[0]).toBe('2');
+      });
     });
 
     // 4. Publish
