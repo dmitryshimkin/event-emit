@@ -13,16 +13,13 @@
       Hub.reset();
     });
 
-    // 1. Exists
-    it('should exists', function () {
+    it('1. Exists', function () {
       expect(window.Hub).toBeDefined();
     });
 
-    // 2. Subscribe
-    describe('subscribe', function () {
+    describe('2. Subscribe', function () {
 
-      // 2.1 sub
-      it('should add subscription to message', function () {
+      it('2.1. sub', function () {
         Hub.sub('message_1', function () {
           __log.push('message_1a');
         });
@@ -44,8 +41,7 @@
         expect(__log[2]).toBe('message_2');
       });
 
-      // 2.2 nested
-      it('should handle nested subscribing', function () {
+      it('2.2. nested sub', function () {
         Hub.sub('message_1', function () {
           __log.push('message_1a');
 
@@ -68,8 +64,7 @@
         expect(__log[1]).toBe('message_1b');
       });
 
-      // 2.3 context
-      it('should be possible to pass context for listener', function () {
+      it('2.3. sub with context', function () {
         var obj = {
           foo: 'bar',
           getFoo: function () {
@@ -84,8 +79,7 @@
         expect(__log[0]).toBe('bar');
       });
 
-      // 2.4 multiple
-      it('should work with multiple messages', function () {
+      it('2.4. multiple messages sub', function () {
         Hub.sub('message_1 message_2', function () {
           __log.push('handler_1');
         });
@@ -106,38 +100,37 @@
       });
     });
 
-    // 3. Unsubscribe
-    describe('unsubscribe', function () {
-
-      // 3.1 unsub
-      it('should remove message listener', function () {
-        var handler_1a = function () {
+    describe('3. Unsubscribe', function () {
+      it('3.1. unsub', function () {
+        var handler_1a = function handler1a () {
           __log.push('message_1a');
         };
 
-        var handler_1b = function () {
+        var handler_1b = function handler1b () {
           __log.push('message_1b');
         };
 
-        var handler_2 = function () {
+        var handler_2 = function handler2 () {
           __log.push('message_2');
         };
 
-        var handler_3 = function () {
+        var handler_3 = function handler3 () {
           __log.push('message_3');
         };
 
-        var handler_4a = function () {
+        var handler_4a = function handler4a () {
           __log.push('message_4a');
         };
 
-        var handler_4b = function () {
+        var handler_4b = function handler4b () {
           __log.push('message_4b');
         };
 
         Hub.unsub('message_3'); // unsub before sub
 
         Hub.sub('message_1', handler_1a);
+        Hub.sub('message_1', handler_1a);
+        Hub.sub('message_1', handler_1a); // Repeated sub
         Hub.sub('message_1', handler_1b);
         Hub.sub('message_2', handler_2);
         Hub.sub('message_3', handler_3);
@@ -154,20 +147,20 @@
         Hub.pub('message_3');
         Hub.pub('message_4');
 
-        expect(__log.length).toBe(3);
-        expect(__log[0]).toBe('message_1b');
-        expect(__log[1]).toBe('message_2');
-        expect(__log[2]).toBe('message_3');
+        expect(__log.length).toBe(4);
+        expect(__log[0]).toBe('message_1a');
+        expect(__log[1]).toBe('message_1b');
+        expect(__log[2]).toBe('message_2');
+        expect(__log[3]).toBe('message_3');
       });
 
-      // 3.2 nested
-      it('should work correctly in nested subscriptions', function () {
-        var handler_1a = function () {
+      it('3.2. nested unsub', function () {
+        var handler_1a = function handler1a() {
           __log.push('message_1a');
           Hub.unsub('message_1', handler_1b);
         };
 
-        var handler_1b = function () {
+        var handler_1b = function handler1b() {
           __log.push('message_1b');
         };
 
@@ -183,8 +176,7 @@
         expect(__log[2]).toBe('message_1a');
       });
 
-      // 3.3 multiple
-      it('should support multiple messages', function () {
+      it('3.3. multiple messages unsub', function () {
         Hub.sub('message_1', function () {
           __log.push('message_1');
         });
@@ -213,8 +205,7 @@
         expect(__log[1]).toBe('message_4');
       });
 
-      // 3.4 context
-      it('should remove subscription by handler and context', function () {
+      it('3.4. unsub by handler and context', function () {
         var handler = function () {
           __log.push(this.id);
         };
@@ -244,8 +235,7 @@
         expect(__log[0]).toBe('2');
       });
 
-      // 3.5 the same handler
-      it('equal handlers', function () {
+      it('3.5. equal handlers unsub', function () {
         var handler = function () {
           __log.push('ok');
         };
@@ -265,11 +255,8 @@
       });
     });
 
-    // 4. Publish
-    describe('publish', function () {
-
-      // 4.1 order
-      it('should notify subscribers in proper order', function () {
+    describe('4. Publish', function () {
+      it('4.1. order', function () {
         Hub.pub('message');
 
         Hub.sub('message', function () {
@@ -287,8 +274,7 @@
         expect(__log[1]).toBe(2);
       });
 
-      // 4.2 multiple
-      it('should support multiple messages', function () {
+      it('4.2. pub multiple messages', function () {
         Hub.sub('message_1', function () {
           __log.push('message_1');
         });
@@ -313,8 +299,7 @@
         expect(__log[2]).toBe('message_4');
       });
 
-      // 4.3 message name as argument
-      it('should pass message name as a first argument', function () {
+      it('4.3. message name in first argument', function () {
         var handler = function (message) {
           __log.push(message);
         };
@@ -339,8 +324,7 @@
         expect(__log[2]).toBe('message_4');
       });
 
-      // 4.4 data
-      it('should be possible pass data to publication', function () {
+      it('4.4. pass data', function () {
         var data = { foo: 'bar' };
         var moreData = 'data string';
 
@@ -357,11 +341,8 @@
       });
     });
 
-    // 5. Reset
-    describe('reset', function () {
-
-      // 5.1 clear
-      it('should remove all subscriptions', function () {
+    describe('5. Reset', function () {
+      it('5.1. remove all subscriptions', function () {
         Hub.sub('message_1', function () {
           __log.push('message_1');
         });
@@ -379,11 +360,8 @@
       });
     });
 
-    // 6. Chaining
-    describe('chaining', function () {
-
-      // 6.1 return instance
-      it('should return Hub instance for chaining in api call', function () {
+    describe('6. Chaining', function () {
+      it('6.1. return Hub instance', function () {
         expect(Hub.sub('message', function () {})).toBe(Hub);
         expect(Hub.unsub('message')).toBe(Hub);
         expect(Hub.pub('message')).toBe(Hub);

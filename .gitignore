@@ -2,6 +2,7 @@ node_modules
 dist/hub.test.js
 test/report
 _SpecRunner.html
+test.html
 .DS_store
 .grunt
 .idea

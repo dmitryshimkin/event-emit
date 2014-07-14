@@ -49,7 +49,10 @@
       while (++j < subscribersCount) {
         args[0] = message;
         subscriber = subscribers[j];
-        subscriber.fn.apply(subscriber.ctx, args);
+  
+        if (subscriber !== undefined) {
+          subscriber.fn.apply(subscriber.ctx, args);
+        }
       }
     }
   
@@ -99,36 +102,55 @@
     var subscribers;
     var subscriber;
     var subscribersCount;
-    var retain;
     var checkHandler = handler !== undefined;
     var checkContext = ctx !== undefined;
+    var index;
+  
+    var retain;
+    var toBeRetained;
+    var removed;
   
     while (++i < messagesCount) {
       message = messages[i];
   
       subscribers = subscriptions[message] || [];
       subscribersCount = subscribers[length];
-      j = -1;
   
-      retain = [];
+      index = -1;
+      j = -1;
   
       if (!checkHandler) {
         subscriptions[message] = [];
         continue;
       }
   
-      while (++j < subscribersCount) {
+      retain = [];
+      removed = false;
+  
+      for (j = 0; j < subscribersCount; j++) {
         subscriber = subscribers[j];
-        if (checkContext) {
-          if (subscriber.fn !== handler || subscriber.ctx !== ctx) {
-            retain.push(subscriber);
+        toBeRetained = true;
+  
+        if (!removed) {
+          if (checkContext) {
+            if (subscriber.fn === handler && subscriber.ctx === ctx) {
+              toBeRetained = false;
+            }
+          } else if (subscriber.fn === handler) {
+            toBeRetained = false;
           }
-        } else if (subscriber.fn !== handler) {
+        }
+  
+        if (toBeRetained) {
           retain.push(subscriber);
+        } else {
+          removed = true;
         }
       }
   
-      subscriptions[message] = retain;
+      if (removed) {
+        subscriptions[message] = retain;
+      }
     }
   
     return this;
