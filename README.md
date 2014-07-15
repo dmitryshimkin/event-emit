@@ -11,8 +11,7 @@ Dependency free lightweight implementation of pattern
 * Support subscribing to multiple messages at once
 * Support AMD / CommonJS
 * Very simple - no bullshit like namespaces, async message delivering, priority, try/catch etc
-* Small size (250 bytes minified and gzipped)
-* Very fast
+* Small size (350 bytes minified and gzipped)
 
 ## Examples
 
