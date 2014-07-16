@@ -136,7 +136,8 @@ module.exports = function (grunt) {
           {
             from: /\/\* jshint \S+:\S+ \*\/\n/g,
             to: ''
-          }]
+          }
+        ]
       }
     },
 
