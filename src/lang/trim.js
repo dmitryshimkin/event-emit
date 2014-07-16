@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Trim string
  * @param str {String} String to be trimmed

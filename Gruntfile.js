@@ -2,6 +2,29 @@ module.exports = function (grunt) {
   'use strict';
 
   grunt.initConfig({
+    availabletasks: {
+      tasks: {
+        options: {
+          filter: 'include',
+          tasks: [
+            'build',
+            'lint',
+            'performance',
+            'test'
+          ]
+        }
+      }
+    },
+
+    benchmark: {
+      all: {
+        src: [
+          'test/benchmark/suite/*.js'
+        ],
+        dest: 'test/report/benchmark.csv'
+      }
+    },
+
     clean: {
       test: ['dist/hub.test.js']
     },
@@ -75,10 +98,24 @@ module.exports = function (grunt) {
       }
     },
 
+    jscs: {
+      all: {
+        options: require('./.jscs.json'),
+        files: {
+          src: [
+            'Gruntfile.js',
+            'src/**',
+            '!node_modules/**'
+          ]
+        }
+      }
+    },
+
     jshint: {
       all: [
         'Gruntfile.js',
-        'dist/hub.js'
+        'src/**',
+        '!node_modules/**'
       ],
       options: {
         jshintrc: '.jshintrc'
@@ -86,6 +123,22 @@ module.exports = function (grunt) {
     },
 
     pkg: grunt.file.readJSON('package.json'),
+
+    replace: {
+      dev: {
+        src: ['dist/hub.js'],
+        overwrite: true,
+        replacements: [
+          {
+            from: '\'use strict\';\n\n',
+            to: ''
+          },
+          {
+            from: /\/\* jshint \S+:\S+ \*\/\n/g,
+            to: ''
+          }]
+      }
+    },
 
     uglify: {
       compress: {
@@ -135,27 +188,71 @@ module.exports = function (grunt) {
     }
   });
 
+  grunt.loadNpmTasks('grunt-available-tasks');
+  grunt.loadNpmTasks('grunt-benchmark');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-text-replace');
+  grunt.loadNpmTasks('grunt-jscs-checker');
   grunt.loadNpmTasks('grunt-wrap');
 
-  // build
-  grunt.registerTask('build-dev', ['concat:dev', 'wrap:dev']);
-  grunt.registerTask('build-test', ['concat:test']);
-  grunt.registerTask('build-prod', ['build-dev', 'uglify:compress']);
+  // Benchmark
+  grunt.registerTask('performance', 'Run benchmark', [
+    'concat:prod',
+    'benchmark'
+  ]);
 
-  // test
-  grunt.registerTask('test-dev', ['build-test', 'jasmine:dev']);
-  grunt.registerTask('test-prod', ['build-prod', 'jasmine:prod']);
+  // Build
+  grunt.registerTask('build-dev', [
+    'concat:dev',
+    'replace:dev',
+    'wrap:dev'
+  ]);
 
-  // alias
-  grunt.registerTask('test', ['test-dev', 'clean:test']);
+  grunt.registerTask('build-test', [
+    'concat:test'
+  ]);
+
+  grunt.registerTask('build-prod', [
+    'build-dev',
+    'uglify:compress'
+  ]);
+
+  grunt.registerTask('build', 'Creates development and production build', [
+    'build-dev',
+    'build-prod'
+  ]);
+
+  // Test
+  grunt.registerTask('test-dev', [
+    'build-test',
+    'jasmine:dev',
+    'clean:test'
+  ]);
+
+  grunt.registerTask('test-prod', [
+    'build-prod',
+    'jasmine:prod',
+    'clean:test'
+  ]);
+
+  grunt.registerTask('test', 'Run tests with code coverage using jasmine and istanbul', [
+    'test-dev',
+    'test-prod'
+  ]);
+
   grunt.registerTask('prod', ['build-prod']);
-  grunt.registerTask('lint', ['build-dev', 'jshint']);
 
-  // default
-  grunt.registerTask('default', ['build-dev']);
+  grunt.registerTask('lint', 'Lint files using jscs and jshint', [
+    'jscs',
+    'jshint'
+  ]);
+
+  // Default
+  grunt.registerTask('default', [
+    'availabletasks'
+  ]);
 };

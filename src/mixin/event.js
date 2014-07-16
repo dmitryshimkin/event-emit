@@ -131,8 +131,10 @@ Mixin.event = {
     var messagesCount = messages[length];
     var message;
     var i = -1;
-
-    var j, subscribers, subscriber, subscribersCount;
+    var j;
+    var subscribers;
+    var subscriber;
+    var subscribersCount;
 
     while (++i < messagesCount) {
       message = messages[i];

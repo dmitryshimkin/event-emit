@@ -1,9 +1,9 @@
 node_modules
-dist/hub.test.js
 test/report
-_SpecRunner.html
-test.html
+
+dist/hub.test.js
+roadmap.txt
+
 .DS_store
 .grunt
 .idea
-roadmap.txt

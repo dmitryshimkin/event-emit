@@ -1,3 +1,5 @@
+'use strict';
+
 /** Export */
 
 if (typeof module === 'object' && typeof module.exports === 'object') {
@@ -7,5 +9,5 @@ if (typeof module === 'object' && typeof module.exports === 'object') {
     return Hub;
   });
 } else if (typeof window === 'object') {
-  window['Hub'] = Hub;
+  window.Hub = Hub;
 }

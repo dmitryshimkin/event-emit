@@ -13,14 +13,18 @@
     "pubsub"
   ],
   "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-contrib-concat": "~0.3.0",
-    "grunt-contrib-jasmine": "~0.5.2",
-    "grunt-template-jasmine-istanbul": "~0.2.5",
-    "grunt-contrib-jshint": "~0.6.4",
-    "grunt-wrap": "~0.3.0",
-    "grunt-contrib-clean": "~0.5.0",
-    "grunt-contrib-uglify": "~0.2.4"
+    "grunt": "0.4.1",
+    "grunt-contrib-concat": "0.4.0",
+    "grunt-contrib-jasmine": "0.6.5",
+    "grunt-template-jasmine-istanbul": "0.3.0",
+    "grunt-contrib-jshint": "0.10.0",
+    "grunt-wrap": "0.3.0",
+    "grunt-contrib-clean": "0.5.0",
+    "grunt-contrib-uglify": "0.5.0",
+    "grunt-available-tasks": "0.5.0",
+    "grunt-benchmark": "0.3.0",
+    "grunt-jscs-checker": "0.6.1",
+    "grunt-text-replace": "0.3.12"
   },
   "license": "MIT",
   "engines": {

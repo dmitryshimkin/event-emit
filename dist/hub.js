@@ -18,8 +18,6 @@
   
   var Mixin = {};
   
-  'use strict';
-  
   var rSplit = /\s+/;
   var slice = Array.prototype.slice;
   var length = 'length';
@@ -151,8 +149,10 @@
       var messagesCount = messages[length];
       var message;
       var i = -1;
-  
-      var j, subscribers, subscriber, subscribersCount;
+      var j;
+      var subscribers;
+      var subscriber;
+      var subscribersCount;
   
       while (++i < messagesCount) {
         message = messages[i];
@@ -175,8 +175,6 @@
     }
   };
   
-  'use strict';
-  
   /**
    * Hub
    * @public
@@ -189,7 +187,7 @@
   Hub.unsub = Mixin.event.off;
   
   /**
-   *
+   * @TBD
    * @returns {Hub}
    */
   
@@ -207,7 +205,7 @@
       return Hub;
     });
   } else if (typeof window === 'object') {
-    window['Hub'] = Hub;
+    window.Hub = Hub;
   }
   
 

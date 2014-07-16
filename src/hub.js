@@ -12,7 +12,7 @@ Hub.sub = Mixin.event.on;
 Hub.unsub = Mixin.event.off;
 
 /**
- *
+ * @TBD
  * @returns {Hub}
  */
 
