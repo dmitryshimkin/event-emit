@@ -18,12 +18,12 @@ Dependency free lightweight implementation of pattern
 ### Basic example
 
 ```javascript
-// subscribe to event
+// subscribe to the event
 Hub.on('some_event', function (evt) {
   console.log('event ' + evt + ' has been fired');
 });
 
-// publish an event
+// publish the event
 Hub.trigger('some_event');
 ```
 
@@ -38,19 +38,19 @@ var obj = {
   }
 }
 
-// subscribe to event and pass context for listener
+// subscribe to the event and pass a context for the listener
 Hub.on('some_event', obj.getFoo, obj);
 ```
 
-### Pass data to listener
+### Pass data to the listener
 
 ```javascript
-// subscribe to event
+// subscribe to the event
 Hub.on('some_event', function (evt, arg1, arg2) {
   console.log('event ' + evt + ' has been fired with arguments:', arg1, arg2);
 });
 
-// publish an event
+// publish the event
 Hub.trigger('some_event', 'arg1', {
   foo: bar
 });
@@ -59,29 +59,29 @@ Hub.trigger('some_event', 'arg1', {
 ### Add a one time subscription
 
 ```javascript
-// subscribe to event
+// subscribe to the event
 Hub.once('event', function () {
   console.log('event fired');
 });
 
-Hub.trigger('event'); // event fired
+Hub.trigger('event'); // the event fired
 Hub.trigger('event'); // nothing happened
 ```
 
-### Remove subscription
+### Remove a subscription
 
 ```javascript
-// create event listener
+// create a listener
 var listener = function (evt, arg1, arg2) {
  //
 }
 
-// subscribe to event
+// subscribe to the event
 Hub.on('some_event', listener);
 Hub.on('another_event', function () { /*...*/ });
 Hub.on('another_event', function () { /*...*/ });
 
-// publish a event
+// publish the event
 Hub.trigger('some_event');
 
 // remove specific listener
@@ -91,10 +91,10 @@ Hub.off('some_event', listener);
 Hub.off('another_event');
 ```
 
-### Deal with list of events
+### Deal with a list of events
 
 ```javascript
-// create listener
+// create a listener
 var listener = function (evt) {
   console.log('event ' + evt + ' has been fired');
 }
