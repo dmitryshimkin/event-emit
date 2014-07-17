@@ -8,9 +8,9 @@ Dependency free lightweight implementation of pattern
 * Dependency free
 * Cross-browser: Chrome, Safari 3+, FF 1.5+, IE 5.5+, Opera 7+, all mobile browsers
 * Support context for subscribers
-* Support subscribing to multiple messages at once
+* Support subscribing to multiple events at once
 * Support AMD / CommonJS
-* Very simple - no bullshit like namespaces, async message delivering, priority, try/catch etc
+* Very simple - no bullshit like namespaces, async event triggering, priority, try/catch etc
 * Small size (380 bytes minified and gzipped)
 
 ## Examples
@@ -18,13 +18,13 @@ Dependency free lightweight implementation of pattern
 ### Basic example
 
 ```javascript
-// subscribe on message
-Hub.on('some_message', function (msg) {
-  console.log('message ' + msg + ' has been received');
+// subscribe to event
+Hub.on('some_event', function (evt) {
+  console.log('event ' + evt + ' has been fired');
 });
 
-// publish a message
-Hub.trigger('some_message');
+// publish an event
+Hub.trigger('some_event');
 ```
 
 ### Listener context
@@ -38,28 +38,28 @@ var obj = {
   }
 }
 
-// subscribe on message and pass context for listener
-Hub.on('some_message', obj.getFoo, obj);
+// subscribe to event and pass context for listener
+Hub.on('some_event', obj.getFoo, obj);
 ```
 
-### Pass data to subscriber
+### Pass data to listener
 
 ```javascript
-// subscribe on message
-Hub.on('some_message', function (msg, arg1, arg2) {
-  console.log('message ' + msg + ' has been received with arguments:', arg1, arg2);
+// subscribe to event
+Hub.on('some_event', function (evt, arg1, arg2) {
+  console.log('event ' + evt + ' has been fired with arguments:', arg1, arg2);
 });
 
-// publish a message
-Hub.trigger('some_message', 'arg1', {
+// publish an event
+Hub.trigger('some_event', 'arg1', {
   foo: bar
 });
 ```
 
-### Once
+### Add a one time subscription
 
 ```javascript
-// subscribe on message
+// subscribe to event
 Hub.once('event', function () {
   console.log('event fired');
 });
@@ -71,43 +71,43 @@ Hub.trigger('event'); // nothing happened
 ### Remove subscription
 
 ```javascript
-// create message listener
-var listener = function (msg, arg1, arg2) {
+// create event listener
+var listener = function (evt, arg1, arg2) {
  //
 }
 
-// subscribe to message
-Hub.on('some_message', listener);
-Hub.on('another_message', function () { /*...*/ });
-Hub.on('another_message', function () { /*...*/ });
+// subscribe to event
+Hub.on('some_event', listener);
+Hub.on('another_event', function () { /*...*/ });
+Hub.on('another_event', function () { /*...*/ });
 
-// publish a message
-Hub.trigger('some_message');
+// publish a event
+Hub.trigger('some_event');
 
 // remove specific listener
-Hub.off('some_message', listener);
+Hub.off('some_event', listener);
 
-// remove all listeners of a message
-Hub.off('another_message');
+// remove all listeners of a specified event
+Hub.off('another_event');
 ```
 
-### Deal with list of messages
+### Deal with list of events
 
 ```javascript
 // create listener
-var listener = function (msg) {
-  console.log('message ' + msg + ' has been received');
+var listener = function (evt) {
+  console.log('event ' + evt + ' has been fired');
 }
 
-// add this listener for three messages at once
-Hub.on('message_1 message_2 message_3', listener);
+// add this listener for three events at once
+Hub.on('event_1 event_2 event_3', listener);
 
-// publish two messages
-Hub.trigger('message_1 message_3', 'some data');
+// publish two events
+Hub.trigger('events_1 events_3', 'some data');
 
-// remove specific subscription for message_1 and message_2
-Hub.off('message_1 message_2', listener);
+// remove specific listener of event_1 and event_2
+Hub.off('event_1 event_2', listener);
 
-// remove all subscriptions for message_2 and message_3
-Hub.off('message_2 message_3');
+// remove all subscriptions of event_2 and event_3
+Hub.off('event_2 event_3');
 ```
