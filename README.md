@@ -56,6 +56,18 @@ Hub.trigger('some_message', 'arg1', {
 });
 ```
 
+### Once
+
+```javascript
+// subscribe on message
+Hub.once('event', function () {
+  console.log('event fired');
+});
+
+Hub.trigger('event'); // event fired
+Hub.trigger('event'); // nothing happened
+```
+
 ### Remove subscription
 
 ```javascript
