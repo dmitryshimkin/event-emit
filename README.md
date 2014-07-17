@@ -11,7 +11,7 @@ Dependency free lightweight implementation of pattern
 * Support subscribing to multiple messages at once
 * Support AMD / CommonJS
 * Very simple - no bullshit like namespaces, async message delivering, priority, try/catch etc
-* Small size (350 bytes minified and gzipped)
+* Small size (380 bytes minified and gzipped)
 
 ## Examples
 
@@ -19,12 +19,12 @@ Dependency free lightweight implementation of pattern
 
 ```javascript
 // subscribe on message
-Hub.sub('some_message', function (msg) {
+Hub.on('some_message', function (msg) {
   console.log('message ' + msg + ' has been received');
 });
 
 // publish a message
-Hub.pub('some_message');
+Hub.trigger('some_message');
 ```
 
 ### Listener context
@@ -39,19 +39,19 @@ var obj = {
 }
 
 // subscribe on message and pass context for listener
-Hub.sub('some_message', obj.getFoo, obj);
+Hub.on('some_message', obj.getFoo, obj);
 ```
 
 ### Pass data to subscriber
 
 ```javascript
 // subscribe on message
-Hub.sub('some_message', function (msg, arg1, arg2) {
+Hub.on('some_message', function (msg, arg1, arg2) {
   console.log('message ' + msg + ' has been received with arguments:', arg1, arg2);
 });
 
 // publish a message
-Hub.pub('some_message', 'arg1', {
+Hub.trigger('some_message', 'arg1', {
   foo: bar
 });
 ```
@@ -65,18 +65,18 @@ var listener = function (msg, arg1, arg2) {
 }
 
 // subscribe to message
-Hub.sub('some_message', listener);
-Hub.sub('another_message', function () { /*...*/ });
-Hub.sub('another_message', function () { /*...*/ });
+Hub.on('some_message', listener);
+Hub.on('another_message', function () { /*...*/ });
+Hub.on('another_message', function () { /*...*/ });
 
 // publish a message
-Hub.pub('some_message');
+Hub.trigger('some_message');
 
 // remove specific listener
-Hub.unsub('some_message', listener);
+Hub.off('some_message', listener);
 
 // remove all listeners of a message
-Hub.unsub('another_message');
+Hub.off('another_message');
 ```
 
 ### Deal with list of messages
@@ -88,14 +88,14 @@ var listener = function (msg) {
 }
 
 // add this listener for three messages at once
-Hub.sub('message_1 message_2 message_3', listener);
+Hub.on('message_1 message_2 message_3', listener);
 
 // publish two messages
-Hub.pub('message_1 message_3', 'some data');
+Hub.trigger('message_1 message_3', 'some data');
 
 // remove specific subscription for message_1 and message_2
-Hub.unsub('message_1 message_2', listener);
+Hub.off('message_1 message_2', listener);
 
 // remove all subscriptions for message_2 and message_3
-Hub.unsub('message_2 message_3');
+Hub.off('message_2 message_3');
 ```

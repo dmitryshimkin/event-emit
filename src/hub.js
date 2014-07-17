@@ -7,9 +7,10 @@
 
 var Hub = {};
 
-Hub.pub = Mixin.event.trigger;
-Hub.sub = Mixin.event.on;
-Hub.unsub = Mixin.event.off;
+Hub.on = Mixin.event.on;
+Hub.once = Mixin.event.once;
+Hub.off = Mixin.event.off;
+Hub.trigger = Mixin.event.trigger;
 
 /**
  * @TBD

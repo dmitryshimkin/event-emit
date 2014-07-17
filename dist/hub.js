@@ -28,12 +28,19 @@
      * @param messages {String}
      * @param handler {Function}
      * @param [context] {Object}
+     * @param [once] {Boolean}
      * @returns {Object}
      */
   
-    on: function (messages, handler, context) {
+    on: function (messages, handler, context, once) {
       if (!this._subscriptions) {
         this._subscriptions = {};
+      }
+  
+      // Normalize arguments
+      if (arguments.length === 3 && typeof context === 'boolean') {
+        once = context;
+        context = undefined;
       }
   
       messages = Lang.trim(messages).split(rSplit);
@@ -48,7 +55,8 @@
         this._subscriptions[message] = this._subscriptions[message] || [];
         this._subscriptions[message].push({
           ctx: context,
-          fn: handler
+          fn: handler,
+          once: !!once
         });
       }
   
@@ -56,14 +64,26 @@
     },
   
     /**
+     * @TBD
+     * @param messages {String}
+     * @param handler {Function}
+     * @param [context] {Object}
+     * @returns {Object}
+     */
+  
+    once: function (messages, handler, context) {
+      return this.on(messages, handler, context, true);
+    },
+  
+    /**
      * Removes subscription
      * @param messages {String}
      * @param handler {Function}
-     * @param [ctx] {Object}
+     * @param [context] {Object}
      * @returns {Hub}
      */
   
-    off: function (messages, handler, ctx) {
+    off: function (messages, handler, context) {
       if (!this._subscriptions) {
         return this;
       }
@@ -78,7 +98,7 @@
       var subscriber;
       var subscribersCount;
       var checkHandler = handler !== undefined;
-      var checkContext = ctx !== undefined;
+      var checkContext = context !== undefined;
       var index;
   
       var retain;
@@ -108,7 +128,7 @@
   
           if (!removed) {
             if (checkContext) {
-              if (subscriber.fn === handler && subscriber.ctx === ctx) {
+              if (subscriber.fn === handler && subscriber.ctx === context) {
                 toBeRetained = false;
               }
             } else if (subscriber.fn === handler) {
@@ -167,6 +187,9 @@
   
           if (subscriber !== undefined) {
             subscriber.fn.apply(subscriber.ctx, args);
+            if (subscriber.once) {
+              this.off(message, subscriber.fn, subscriber.ctx);
+            }
           }
         }
       }
@@ -182,9 +205,10 @@
   
   var Hub = {};
   
-  Hub.pub = Mixin.event.trigger;
-  Hub.sub = Mixin.event.on;
-  Hub.unsub = Mixin.event.off;
+  Hub.on = Mixin.event.on;
+  Hub.once = Mixin.event.once;
+  Hub.off = Mixin.event.off;
+  Hub.trigger = Mixin.event.trigger;
   
   /**
    * @TBD
