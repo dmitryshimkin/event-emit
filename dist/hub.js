@@ -20,7 +20,6 @@
   
   var rSplit = /\s+/;
   var slice = Array.prototype.slice;
-  var length = 'length';
   
   Mixin.event = {
     /**
@@ -37,15 +36,9 @@
         this._subscriptions = {};
       }
   
-      // Normalize arguments
-      if (arguments.length === 3 && typeof context === 'boolean') {
-        once = context;
-        context = undefined;
-      }
-  
       messages = Lang.trim(messages).split(rSplit);
   
-      var messagesCount = messages[length];
+      var messagesCount = messages.length;
       var message;
       var i = -1;
   
@@ -90,7 +83,7 @@
   
       messages = Lang.trim(messages).split(rSplit);
   
-      var messagesCount = messages[length];
+      var messagesCount = messages.length;
       var message;
       var i = -1;
       var j;
@@ -109,7 +102,7 @@
         message = messages[i];
   
         subscribers = this._subscriptions[message] || [];
-        subscribersCount = subscribers[length];
+        subscribersCount = subscribers.length;
   
         index = -1;
         j = -1;
@@ -166,7 +159,7 @@
   
       var args = slice.call(arguments);
   
-      var messagesCount = messages[length];
+      var messagesCount = messages.length;
       var message;
       var i = -1;
       var j;
@@ -178,18 +171,17 @@
         message = messages[i];
   
         subscribers = this._subscriptions[message] || [];
-        subscribersCount = subscribers[length];
+        subscribersCount = subscribers.length;
         j = -1;
   
         while (++j < subscribersCount) {
           args[0] = message;
-          subscriber = subscribers[j];
   
-          if (subscriber !== undefined) {
-            subscriber.fn.apply(subscriber.ctx, args);
-            if (subscriber.once) {
-              this.off(message, subscriber.fn, subscriber.ctx);
-            }
+          subscriber = subscribers[j];
+          subscriber.fn.apply(subscriber.ctx, args);
+  
+          if (subscriber.once) {
+            this.off(message, subscriber.fn, subscriber.ctx);
           }
         }
       }
