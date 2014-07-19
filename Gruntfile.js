@@ -19,7 +19,8 @@ module.exports = function (grunt) {
     benchmark: {
       all: {
         src: [
-          'test/benchmark/suite/*.js'
+          'test/benchmark/suite/on.js'
+          //'test/benchmark/suite/on-multi.js'
         ],
         dest: 'test/report/benchmark.csv'
       }
@@ -202,7 +203,7 @@ module.exports = function (grunt) {
 
   // Benchmark
   grunt.registerTask('performance', 'Run benchmark', [
-    'concat:prod',
+    'build:dev',
     'benchmark'
   ]);
 

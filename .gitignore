@@ -1,5 +1,6 @@
 node_modules
 test/report
+test/benchmark/lib
 
 dist/hub.test.js
 roadmap.txt
