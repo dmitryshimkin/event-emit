@@ -1,52 +1,41 @@
 (function (undefined) {
   'use strict';
 
-  var Lang = {};
-  
-  /**
-   * Trim string
-   * @param str {String} String to be trimmed
-   * @return {String} Trimmed string
-   * @public
-   */
-  
-  Lang.trim = function (str) {
-    return str.replace(Lang.trim.r, '');
-  };
-  
-  Lang.trim.r = /^\s+|\s+$/g;
-  
   var Mixin = {};
   
-  var rSplit = /\s+/;
   var slice = Array.prototype.slice;
+  var R_SPACE = /\s+/;
   
   Mixin.event = {
     /**
      * @TBD
-     * @param messages {String}
+     * @param events {String}
      * @param handler {Function}
      * @param [context] {Object}
      * @param [once] {Boolean}
      * @returns {Object}
      */
   
-    on: function (messages, handler, context, once) {
-      if (!this._subscriptions) {
-        this._subscriptions = {};
+    on: function (events, handler, context, once) {
+      var all = this._subscriptions;
+      var eventsList = events.split(R_SPACE);
+      var event;
+      var i = eventsList.length;
+      var entries;
+  
+      if (all === undefined) {
+        all = this._subscriptions = {};
       }
   
-      messages = Lang.trim(messages).split(rSplit);
+      while (i--) {
+        event = eventsList[i];
+        entries = all[event];
   
-      var messagesCount = messages.length;
-      var message;
-      var i = -1;
+        if (entries === undefined) {
+          entries = all[event] = [];
+        }
   
-      while (++i < messagesCount) {
-        message = messages[i];
-  
-        this._subscriptions[message] = this._subscriptions[message] || [];
-        this._subscriptions[message].push({
+        entries.push({
           ctx: context,
           fn: handler,
           once: !!once
@@ -58,33 +47,33 @@
   
     /**
      * @TBD
-     * @param messages {String}
+     * @param events {String}
      * @param handler {Function}
      * @param [context] {Object}
      * @returns {Object}
      */
   
-    once: function (messages, handler, context) {
-      return this.on(messages, handler, context, true);
+    once: function (events, handler, context) {
+      return this.on(events, handler, context, true);
     },
   
     /**
      * Removes subscription
-     * @param messages {String}
+     * @param events {String}
      * @param handler {Function}
      * @param [context] {Object}
      * @returns {Hub}
      */
   
-    off: function (messages, handler, context) {
+    off: function (events, handler, context) {
       if (!this._subscriptions) {
         return this;
       }
   
-      messages = Lang.trim(messages).split(rSplit);
+      events = events.split(R_SPACE);
   
-      var messagesCount = messages.length;
-      var message;
+      var eventsCount = events.length;
+      var event;
       var i = -1;
       var j;
       var subscribers;
@@ -98,17 +87,17 @@
       var toBeRetained;
       var removed;
   
-      while (++i < messagesCount) {
-        message = messages[i];
+      while (++i < eventsCount) {
+        event = events[i];
   
-        subscribers = this._subscriptions[message] || [];
+        subscribers = this._subscriptions[event] || [];
         subscribersCount = subscribers.length;
   
         index = -1;
         j = -1;
   
         if (!checkHandler) {
-          this._subscriptions[message] = [];
+          this._subscriptions[event] = [];
           continue;
         }
   
@@ -137,7 +126,7 @@
         }
   
         if (removed) {
-          this._subscriptions[message] = retain;
+          this._subscriptions[event] = retain;
         }
       }
   
@@ -146,42 +135,42 @@
   
     /**
      * @TBD
-     * @param messages {String}
+     * @param events {String}
      * @returns {Object}
      */
   
-    trigger: function (messages) {
+    trigger: function (events) {
       if (!this._subscriptions) {
         return this;
       }
   
-      messages = Lang.trim(messages).split(rSplit);
+      events = events.split(R_SPACE);
   
       var args = slice.call(arguments);
   
-      var messagesCount = messages.length;
-      var message;
+      var eventsCount = events.length;
+      var event;
       var i = -1;
       var j;
       var subscribers;
       var subscriber;
       var subscribersCount;
   
-      while (++i < messagesCount) {
-        message = messages[i];
+      while (++i < eventsCount) {
+        event = events[i];
   
-        subscribers = this._subscriptions[message] || [];
+        subscribers = this._subscriptions[event] || [];
         subscribersCount = subscribers.length;
         j = -1;
   
         while (++j < subscribersCount) {
-          args[0] = message;
+          args[0] = event;
   
           subscriber = subscribers[j];
           subscriber.fn.apply(subscriber.ctx, args);
   
           if (subscriber.once) {
-            this.off(message, subscriber.fn, subscriber.ctx);
+            this.off(event, subscriber.fn, subscriber.ctx);
           }
         }
       }

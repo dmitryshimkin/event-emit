@@ -34,8 +34,6 @@ module.exports = function (grunt) {
       dev: {
         files: {
           'dist/hub.js': [
-            'src/lang/Lang.js',
-            'src/lang/trim.js',
             'src/mixin/Mixin.js',
             'src/mixin/event.js',
             'src/hub.js',
@@ -46,8 +44,6 @@ module.exports = function (grunt) {
       test: {
         files: {
           'dist/hub.test.js': [
-            'src/lang/Lang.js',
-            'src/lang/trim.js',
             'src/mixin/Mixin.js',
             'src/mixin/event.js',
             'src/hub.js'
