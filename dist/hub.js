@@ -19,8 +19,8 @@
     on: function (events, handler, context, once) {
       var all = this._subscriptions;
       var eventsList = events.split(R_SPACE);
-      var event;
       var i = eventsList.length;
+      var event;
       var entries;
   
       if (all === undefined) {
@@ -38,7 +38,7 @@
         entries.push({
           ctx: context,
           fn: handler,
-          once: !!once
+          once: once
         });
       }
   
@@ -70,9 +70,8 @@
         return this;
       }
   
-      events = events.split(R_SPACE);
-  
-      var eventsCount = events.length;
+      var eventsList = events.split(R_SPACE);
+      var eventsCount = eventsList.length;
       var event;
       var i = -1;
       var j;
@@ -88,7 +87,7 @@
       var removed;
   
       while (++i < eventsCount) {
-        event = events[i];
+        event = eventsList[i];
   
         subscribers = this._subscriptions[event] || [];
         subscribersCount = subscribers.length;
@@ -144,11 +143,9 @@
         return this;
       }
   
-      events = events.split(R_SPACE);
-  
+      var eventsList = events.split(R_SPACE);
       var args = slice.call(arguments);
-  
-      var eventsCount = events.length;
+      var eventsCount = eventsList.length;
       var event;
       var i = -1;
       var j;
@@ -157,7 +154,7 @@
       var subscribersCount;
   
       while (++i < eventsCount) {
-        event = events[i];
+        event = eventsList[i];
   
         subscribers = this._subscriptions[event] || [];
         subscribersCount = subscribers.length;
