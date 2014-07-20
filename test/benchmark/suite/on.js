@@ -43,9 +43,9 @@ module.exports = {
     },
 
     'EventEmitter2': function () {
-      emitter.addListener('event1', handlerA);
-      emitter.addListener('event2', handlerB);
-      emitter.addListener('event3', handlerC);
+      emitter2.on('event1', handlerA);
+      emitter2.on('event2', handlerB);
+      emitter2.on('event3', handlerC);
     },
 
     'Backbone': function () {

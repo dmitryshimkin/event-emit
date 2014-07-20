@@ -19,7 +19,8 @@ module.exports = function (grunt) {
     benchmark: {
       all: {
         src: [
-          'test/benchmark/suite/on.js'
+          //'test/benchmark/suite/on.js',
+          'test/benchmark/suite/off.js'
           //'test/benchmark/suite/on-multi.js'
         ],
         dest: 'test/report/benchmark.csv'
