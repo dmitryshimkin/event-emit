@@ -20,7 +20,7 @@ var emitter = new EventEmitter();
 // ===============================
 
 module.exports = {
-  name: 'Subscribe to ',
+  name: 'subscribe to list of events',
   tests: {
     'Hub': function () {
       Hub.on('event1 event2 event3', handlerA);

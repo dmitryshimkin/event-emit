@@ -22,7 +22,7 @@ var emitter2 = new Emitter2();
 // ===============================
 
 module.exports = {
-  name: 'Subscribe',
+  name: 'unsubscribe',
   tests: {
     'Hub': function () {
       Hub.on('event', handlerA);

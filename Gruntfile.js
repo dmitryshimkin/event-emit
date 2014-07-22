@@ -9,7 +9,7 @@ module.exports = function (grunt) {
           tasks: [
             'build',
             'lint',
-            'performance',
+            'perf',
             'test'
           ]
         }
@@ -20,7 +20,8 @@ module.exports = function (grunt) {
       all: {
         src: [
           //'test/benchmark/suite/on.js',
-          'test/benchmark/suite/off.js'
+          //'test/benchmark/suite/off.js'
+          'test/benchmark/suite/trigger.js'
           //'test/benchmark/suite/on-multi.js'
         ],
         dest: 'test/report/benchmark.csv'
@@ -199,7 +200,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-wrap');
 
   // Benchmark
-  grunt.registerTask('performance', 'Run benchmark', [
+  grunt.registerTask('perf', 'Run benchmark', [
     'build:dev',
     'benchmark'
   ]);
