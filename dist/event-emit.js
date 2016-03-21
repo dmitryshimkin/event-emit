@@ -1,19 +1,41 @@
-'use strict';
+/**
+ * Event Emitter
+ * Version: 0.2.0
+ * Author: Dmitry Shimkin <dmitryshimkin@gmail.com>
+ * License: MIT
+ * https://github.com/dmitryshimkin/emitter
+ */
+;(function(root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define([], factory);
+  } else if (typeof exports === 'object') {
+    module.exports = factory();
+  } else {
+    root.EventEmit = factory();
+  }
+}(this, function() {
+  'use strict';
 
-var slice = Array.prototype.slice;
-var R_SPACE = /\s+/;
+  var slice = Array.prototype.slice;
+  var R_SPACE = /\s+/;
 
-Mixin.event = {
   /**
-   * @TBD
-   * @param events {String}
-   * @param handler {Function}
-   * @param [context] {Object}
-   * @param [once] {Boolean}
+   * Event Emit class
+   * @class
+   */
+  function EventEmit () {
+  }
+
+  /**
+   * Adds a subscription to given event with given handler.
+   * @param  {String}   events
+   * @param  {Function} handler
+   * @param  {Object}   [context]
+   * @param  {Boolean}  [once]
    * @returns {Object}
    */
 
-  on: function (events, handler, context, once) {
+  function on (events, handler, context, once) {
     var all = this._subscriptions;
     var eventsList = events.split(R_SPACE);
     var i = eventsList.length;
@@ -40,29 +62,29 @@ Mixin.event = {
     }
 
     return this;
-  },
+  }
 
   /**
-   * @TBD
-   * @param events {String}
-   * @param handler {Function}
-   * @param [context] {Object}
+   * Adds a single subscription to given event
+   * @param   {String}   events
+   * @param   {Function} handler
+   * @param   {Object}   [context]
    * @returns {Object}
    */
 
-  once: function (events, handler, context) {
+  function once (events, handler, context) {
     return this.on(events, handler, context, true);
-  },
+  }
 
   /**
-   * Removes subscription
-   * @param events {String}
-   * @param handler {Function}
-   * @param [context] {Object}
-   * @returns {Hub}
+   * Removes a subscription
+   * @param   {String}   events
+   * @param   {Function} handler
+   * @param   {Object}   [context]
+   * @returns {Object}
    */
 
-  off: function (events, handler, context) {
+  function off (events, handler, context) {
     if (!this._subscriptions) {
       return this;
     }
@@ -127,15 +149,15 @@ Mixin.event = {
     }
 
     return this;
-  },
+  }
 
   /**
-   * @TBD
-   * @param events {String}
+   * Emits given event or events
+   * @param   {String} events
    * @returns {Object}
    */
 
-  trigger: function (events) {
+  function emit (events) {
     if (!this._subscriptions) {
       return this;
     }
@@ -171,4 +193,29 @@ Mixin.event = {
 
     return this;
   }
-};
+
+  var api = EventEmit.prototype;
+
+  api.on      = on;
+  api.once    = once;
+  api.off     = off;
+  api.emit    = emit;
+
+  /**
+   * Applies event emitter as mixin
+   * @param  {Object} target
+   * @public
+   * @static
+   */
+
+  function mixinTo (target) {
+    target.on   = api.on;
+    target.once = api.once;
+    target.off  = api.off;
+    target.emit = api.emit;
+  }
+
+  EventEmit.mixinTo = mixinTo;
+
+return EventEmit;
+}));
