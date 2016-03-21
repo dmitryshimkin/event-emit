@@ -1,7 +1,7 @@
 {
-  "name": "event-emitter-js",
+  "name": "event-emit",
   "preferGlobal": false,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "Dmitry Shimkin <dmitryshimkin@gmail.com>",
   "description": "Dependency free lightweight implementation of pattern publish-subscribe in Javascript for browser and nodejs",
   "repository": {
@@ -12,6 +12,7 @@
     "hub",
     "pubsub"
   ],
+  "main": "./dist/hub.js",
   "devDependencies": {
     "grunt": "0.4.1",
     "grunt-contrib-concat": "0.4.0",
