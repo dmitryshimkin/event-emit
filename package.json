@@ -1,7 +1,7 @@
 {
   "name": "event-emit",
   "preferGlobal": false,
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": "Dmitry Shimkin <dmitryshimkin@gmail.com>",
   "description": "Dependency free lightweight implementation of event emitter pattern for browser and NodeJS",
   "repository": {
