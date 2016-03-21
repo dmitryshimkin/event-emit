@@ -1,5 +1,5 @@
 {
-  "name": "Hub",
+  "name": "event-emitter-js",
   "preferGlobal": false,
   "version": "0.1.0",
   "author": "Dmitry Shimkin <dmitryshimkin@gmail.com>",
