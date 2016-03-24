@@ -200,3 +200,5 @@ function mixinTo (target) {
 }
 
 EventEmit.mixinTo = mixinTo;
+
+module.exports = EventEmit;

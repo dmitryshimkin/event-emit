@@ -1,8 +1,9 @@
 node_modules/
+coverage/
 test/report
 test/benchmark/lib
 
-dist/hub.test.js
+npm-debug.log
 roadmap.txt
 
 .DS_store
