@@ -1,3 +1,7 @@
+### v0.3.2 - 25/03/2016
+
+* Add unit tests
+
 ### v0.3.1 - 24/03/2016
 
 * Update documentation in readme file

@@ -1,7 +1,7 @@
 {
   "name": "event-emit",
   "preferGlobal": false,
-  "version": "0.3.1",
+  "version": "0.3.2",
   "author": "Dmitry Shimkin <dmitryshimkin@gmail.com>",
   "description": "Dependency free lightweight implementation of event emitter pattern for browser and NodeJS",
   "repository": {
@@ -27,7 +27,8 @@
     "jasmine-spec-reporter": "^2.4.0"
   },
   "scripts": {
-    "test": "istanbul cover test/index.js"
+    "test": "node test/index.js",
+    "cover": "istanbul cover test/index.js"
   },
   "license": "MIT",
   "engines": {

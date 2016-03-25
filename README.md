@@ -103,14 +103,12 @@ const componentA = {}
 
 EventEmit.mixinTo(componentA)
 
-componentA.on('some_event', function (evt, data) {
-  console.log(`event ${evt} has been fired with`, data);
+componentA.on('some_event', function (evt, arg1, arg2) {
+  console.log(`event ${evt} has been fired with`, arg1, arg2); // {foo: bar}, 10
 });
 
 // Publish the event
-componentA.emit('some_event', {
-  foo: bar
-});
+componentA.emit('some_event', {foo: bar}, 10);
 ```
 
 ### Add a one time subscription
