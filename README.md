@@ -52,7 +52,7 @@ define(['EventEmit'], function (EventEmit) {
 or as a ES2015 module:
 
 ```javascript
-import {EventEmit} from 'event-emit'
+import EventEmit from 'event-emit'
 ```
 
 
