@@ -13,7 +13,7 @@ var pkg = require('./package.json');
 function getBanner () {
   return [
     '/**',
-    ' * Event Emitter',
+    ' * event-emit',
     ' * Version: <%= version %>',
     ' * Author: <%= author %>',
     ' * License: MIT',

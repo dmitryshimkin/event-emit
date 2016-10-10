@@ -1,6 +1,6 @@
 /**
- * Event Emitter
- * Version: 0.2.0
+ * event-emit
+ * Version: 0.3.3
  * Author: Dmitry Shimkin <dmitryshimkin@gmail.com>
  * License: MIT
  * https://github.com/dmitryshimkin/emitter
@@ -16,7 +16,6 @@
 }(this, function() {
   'use strict';
 
-  var slice = Array.prototype.slice;
   var R_SPACE = /\s+/;
 
   /**
@@ -163,7 +162,9 @@
     }
 
     var eventsList = events.split(R_SPACE);
-    var args = slice.call(arguments);
+    var args = arguments;
+    var argsCount = args.length;
+
     var eventsCount = eventsList.length;
     var event;
     var i = -1;
@@ -180,10 +181,14 @@
       j = -1;
 
       while (++j < subscribersCount) {
-        args[0] = event;
-
         subscriber = subscribers[j];
-        subscriber.fn.apply(subscriber.ctx, args);
+        switch (argsCount) {
+          case 1: subscriber.fn.call(subscriber.ctx, event); break;
+          case 2: subscriber.fn.call(subscriber.ctx, event, args[1]); break;
+          case 3: subscriber.fn.call(subscriber.ctx, event, args[1], args[2]); break;
+          case 4: subscriber.fn.call(subscriber.ctx, event, args[1], args[2], args[3]); break;
+          case 5: subscriber.fn.call(subscriber.ctx, event, args[1], args[2], args[3], args[4]); break;
+        }
 
         if (subscriber.once) {
           this.off(event, subscriber.fn, subscriber.ctx);
@@ -216,6 +221,8 @@
   }
 
   EventEmit.mixinTo = mixinTo;
+
+  module.exports = EventEmit;
 
 return EventEmit;
 }));

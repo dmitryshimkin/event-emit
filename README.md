@@ -1,6 +1,6 @@
 # event-emit
 
-Dependency free lightweight implementation of 
+Dependency free lightweight implementation of
 [Observer pattern](https://en.wikipedia.org/wiki/Observer_pattern) in Javascript
 
 ## Features
@@ -10,8 +10,8 @@ Dependency free lightweight implementation of
 * Supports a context for subscribers
 * Supports subscribing to multiple events at once
 * Simple: no bullshit like namespaces, async event emitting, priority, try/catch etc
-* Small size: (700 bytes minified and gzipped)
-* Provided as a UMD module 
+* Small size: (750 bytes minified and gzipped)
+* Provided as a UMD module
 
 ## Install
 
@@ -21,7 +21,7 @@ Install it from NPM:
 npm install event-emit
 ```
 
-Or download it directly 
+Or download it directly
 from [/dist/event-emit.min.js](https://github.com/dmitryshimkin/emitter/blob/master/dist/event-emit.min.js)
 
 ## Usage
@@ -32,7 +32,7 @@ Include it as a script tag to your HTML page:
 <script src="node_modules/event-emit/dist/event-emit.min.js"></script>
 <script>
   // window.EventEmit is avaialable here
-</script> 
+</script>
 ```
 
 Or use it as a CommonJS module:
@@ -61,7 +61,7 @@ import EventEmit from 'event-emit'
 ### Basic example
 
 ```javascript
-import {EventEmit} from 'event-emit'
+import EventEmit from 'event-emit'
 
 const componentA = {}
 
@@ -79,7 +79,7 @@ componentA.emit('some_event');
 ### Listener context
 
 ```javascript
-import {EventEmit} from 'event-emit'
+import EventEmit from 'event-emit'
 
 const componentA = {}
 const componentB = {
@@ -97,7 +97,7 @@ componentA.on('some_event', componentB.onChange, componentB);
 ### Pass data to the listener
 
 ```javascript
-import {EventEmit} from 'event-emit'
+import EventEmit from 'event-emit'
 
 const componentA = {}
 
@@ -114,7 +114,7 @@ componentA.emit('some_event', {foo: bar}, 10);
 ### Add a one time subscription
 
 ```javascript
-import {EventEmit} from 'event-emit'
+import EventEmit from 'event-emit'
 
 const componentA = {}
 
@@ -132,7 +132,7 @@ componentA.emit('event'); // Nothing happened
 ### Remove a subscription
 
 ```javascript
-import {EventEmit} from 'event-emit'
+import EventEmit from 'event-emit'
 
 const componentA = {}
 const componentB = {}
@@ -165,7 +165,7 @@ componentA.off('another_event')
 ### Deal with a list of events
 
 ```javascript
-import {EventEmit} from 'event-emit'
+import EventEmit from 'event-emit'
 
 const componentA = {}
 
@@ -192,11 +192,15 @@ componentA.off('event_2 event_3')
 ### PubSub pattern implementation
 
 ```javascript
-import {EventEmit} from 'event-emit'
+import EventEmit from 'event-emit'
 
-const {emit: publish, on: subscribe, off: unsubscribe} = EventEmit.prototype; 
+const {
+  emit: publish,
+  on: subscribe,
+  off: unsubscribe
+} = EventEmit.prototype;
 
-export const pubsub = {
+export default {
   publish,
   subscribe,
   unsubscribe
@@ -205,7 +209,7 @@ export const pubsub = {
 
 ```javascript
 // component-a/index.js
-import {pubsub} from 'path/to/pubsub'
+import pubsub from 'path/to/pubsub'
 
 pubsub.subscribe('some-event', function (evt, data) {
   console.log(`Pubsub event ${evt} has been fired with`, data);
@@ -214,9 +218,13 @@ pubsub.subscribe('some-event', function (evt, data) {
 
 ```javascript
 // component-b/index.js
-import {pubsub} from 'path/to/pubsub'
+import pubsub from 'path/to/pubsub'
 
 pubsub.publish('some-event', {
   foo: 'bar'
 })
 ```
+
+# License
+
+MIT
