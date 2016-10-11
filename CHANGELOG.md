@@ -1,3 +1,7 @@
+### v0.3.4 - 11/10/2016
+
+* Fix wrong reference to git repository in package.json
+
 ### v0.3.3 - 10/10/2016
 
 * Update documentation

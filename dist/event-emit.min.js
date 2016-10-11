@@ -1,6 +1,6 @@
 /**
  * event-emit
- * Version: 0.3.3
+ * Version: 0.3.4
  * Author: Dmitry Shimkin <dmitryshimkin@gmail.com>
  * License: MIT
  * https://github.com/dmitryshimkin/emitter
