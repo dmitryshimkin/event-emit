@@ -6,9 +6,29 @@ var indent = require('gulp-indent');
 var rename = require('gulp-rename');
 var sizereport = require('gulp-sizereport');
 var uglify = require('gulp-uglify');
-var umd = require('gulp-umd');
+var wrap = require('gulp-wrap');
 
 var pkg = require('./package.json');
+
+var umd = [
+  ';(function(root, factory) {',
+  '  /* istanbul ignore next */',
+  '  if (typeof define === \'function\' && define.amd) {',
+  '    define([], factory);',
+  '  } else if (typeof exports === \'object\') {',
+  '    /* istanbul ignore next */',
+  '    module.exports = factory();',
+  '  } else {',
+  '    /* istanbul ignore next */',
+  '    root.EventEmit = factory();',
+  '  }',
+  '}(this, function () {',
+  '  \'use strict\';',
+  '',
+  '<%= contents %>',
+  '  return EventEmit;',
+  '}));'
+].join('\n');
 
 function getBanner () {
   return [
@@ -31,7 +51,7 @@ function getBanner () {
 gulp.task('build', function () {
   return gulp.src('./src/EventEmit.js')
     .pipe(indent())
-    .pipe(umd())
+    .pipe(wrap(umd))
     .pipe(header(getBanner(), pkg))
     .pipe(rename('event-emit.js'))
     .pipe(gulp.dest('./dist/'));

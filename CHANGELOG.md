@@ -1,3 +1,7 @@
+### v0.3.5 - 11/10/2016
+
+* Fix build for browsers
+
 ### v0.3.4 - 11/10/2016
 
 * Fix wrong reference to git repository in package.json

@@ -1,19 +1,22 @@
 /**
  * event-emit
- * Version: 0.3.4
+ * Version: 0.3.5
  * Author: Dmitry Shimkin <dmitryshimkin@gmail.com>
  * License: MIT
  * https://github.com/dmitryshimkin/emitter
  */
 ;(function(root, factory) {
+  /* istanbul ignore next */
   if (typeof define === 'function' && define.amd) {
     define([], factory);
   } else if (typeof exports === 'object') {
+    /* istanbul ignore next */
     module.exports = factory();
   } else {
+    /* istanbul ignore next */
     root.EventEmit = factory();
   }
-}(this, function() {
+}(this, function () {
   'use strict';
 
   var R_SPACE = /\s+/;
@@ -33,7 +36,6 @@
    * @param  {Boolean}  [once]
    * @returns {Object}
    */
-
   function on (events, handler, context, once) {
     var all = this._subscriptions;
     var eventsList = events.split(R_SPACE);
@@ -70,7 +72,6 @@
    * @param   {Object}   [context]
    * @returns {Object}
    */
-
   function once (events, handler, context) {
     return this.on(events, handler, context, true);
   }
@@ -82,7 +83,6 @@
    * @param   {Object}   [context]
    * @returns {Object}
    */
-
   function off (events, handler, context) {
     if (!this._subscriptions) {
       return this;
@@ -155,7 +155,6 @@
    * @param   {String} events
    * @returns {Object}
    */
-
   function emit (events) {
     if (!this._subscriptions) {
       return this;
@@ -201,10 +200,10 @@
 
   var api = EventEmit.prototype;
 
-  api.on      = on;
-  api.once    = once;
-  api.off     = off;
-  api.emit    = emit;
+  api.on = on;
+  api.once = once;
+  api.off = off;
+  api.emit = emit;
 
   /**
    * Applies event emitter as mixin
@@ -212,7 +211,6 @@
    * @public
    * @static
    */
-
   function mixinTo (target) {
     target.on   = api.on;
     target.once = api.once;
@@ -222,7 +220,5 @@
 
   EventEmit.mixinTo = mixinTo;
 
-  module.exports = EventEmit;
-
-return EventEmit;
+  return EventEmit;
 }));

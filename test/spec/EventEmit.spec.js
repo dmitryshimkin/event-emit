@@ -1,10 +1,10 @@
 'use strict';
 
-const EventEmit = require('../../src/EventEmit');
+const EventEmit = require('../../dist/event-emit');
 
-describe('event-emit', () => {
-  let log;
-  let ee;
+describe('event-emit', function () {
+  var log;
+  var ee;
 
   function noop () {}
 
@@ -17,26 +17,26 @@ describe('event-emit', () => {
   }
 
   function writeLogFn (msg) {
-    return () => {
+    return function () {
       writeLog(msg)
     }
   }
 
-  beforeEach(() => {
+  beforeEach(function () {
     ee = new EventEmit();
     log = []
   });
 
-  describe('Class', () => {
-    it('should exist', () => {
+  describe('Class', function () {
+    it('should exist', function () {
       expect(typeof EventEmit).toBe('function');
     })
   });
 
-  describe('Static methods', () => {
-    describe('mixinTo', () => {
-      it('should mixin event emitter to given object', () => {
-        const obj = {};
+  describe('Static methods', function () {
+    describe('mixinTo', function () {
+      it('should mixin event emitter to given object', function () {
+        var obj = {};
 
         EventEmit.mixinTo(obj);
 
@@ -48,7 +48,7 @@ describe('event-emit', () => {
     })
   });
 
-  describe('Instance method', () => {
+  describe('Instance method', function () {
     describe('on', function () {
       it('should subscribe to event', function () {
         ee.on('event_1', writeLogFn('event_1a'));
@@ -65,8 +65,8 @@ describe('event-emit', () => {
         ]);
       });
 
-      it('should handle nested calls properly', () => {
-        ee.on('event_1', () => {
+      it('should handle nested calls properly', function () {
+        ee.on('event_1', function () {
           writeLog('event_1a');
           ee.on('event_1', writeLogFn('event_1b'));
         });
@@ -87,7 +87,7 @@ describe('event-emit', () => {
         ]);
       });
 
-      it('should support context parameter', () => {
+      it('should support context parameter', function () {
         var obj = {
           foo: 'bar',
           getFoo: function getFoo () {
@@ -103,7 +103,7 @@ describe('event-emit', () => {
         ]);
       });
 
-      it('should support multiple events', () => {
+      it('should support multiple events', function () {
         ee.on('event_1 event_2', writeLogFn('handler_1'));
         ee.on(' event_2   event_3 ', writeLogFn('handler_2'));
 
@@ -119,13 +119,13 @@ describe('event-emit', () => {
         ])
       });
 
-      it('should return instance for chaining', () => {
+      it('should return instance for chaining', function () {
         expect(ee.on('event', noop)).toBe(ee);
       });
     });
 
-    describe('off', () => {
-      it('should unsubscribe from event', () => {
+    describe('off', function () {
+      it('should unsubscribe from event', function () {
         function handler_1a () {
           writeLog('event_1a');
         }
@@ -179,7 +179,7 @@ describe('event-emit', () => {
         ]);
       });
 
-      it('should handle nested calls properly', () => {
+      it('should handle nested calls properly', function () {
         function handler_1a() {
           writeLog('event_1a');
           ee.off('event_1', handler_1b);
@@ -202,7 +202,7 @@ describe('event-emit', () => {
         ]);
       });
 
-      it('should support multiple unsubscribing', () => {
+      it('should support multiple unsubscribing', function () {
         ee.on('event_1', writeLogFn('event_1'));
         ee.on('event_2', writeLogFn('event_2'));
         ee.on('event_3', writeLogFn('event_3'));
@@ -221,17 +221,17 @@ describe('event-emit', () => {
         ]);
       });
 
-      it('should support context parameter', () => {
+      it('should support context parameter', function () {
         function handler () {
           var ctx = this || {};
           writeLog(ctx.id);
         }
 
-        const ctx1 = {
+        var ctx1 = {
           id: '1'
         };
 
-        const ctx2 = {
+        var ctx2 = {
           id: '2'
         };
 
@@ -259,7 +259,7 @@ describe('event-emit', () => {
         ]);
       });
 
-      it('should support equal subscriptions', () => {
+      it('should support equal subscriptions', function () {
         function handler () {
           writeLog('ok');
         }
@@ -290,13 +290,13 @@ describe('event-emit', () => {
         expect(log).toEqual([]);
       });
 
-      it('should return instance for chaining', () => {
+      it('should return instance for chaining', function () {
         expect(ee.off('event')).toBe(ee);
       });
     });
 
-    describe('emit', () => {
-      it('should call handlers in the same order they have beed added', () => {
+    describe('emit', function () {
+      it('should call handlers in the same order they have beed added', function () {
         ee.emit('event');
 
         ee.on('event', writeLogFn(1));
@@ -307,7 +307,7 @@ describe('event-emit', () => {
         expect(log).toEqual([1, 2]);
       });
 
-      it('should support multiple events', () => {
+      it('should support multiple events', function () {
         ee.on('event_1', writeLogFn('event_1'));
         ee.on('event_2', writeLogFn('event_2'));
         ee.on('event_3', writeLogFn('event_3'));
@@ -322,7 +322,7 @@ describe('event-emit', () => {
         ]);
       });
 
-      it('should pass event name as first argument to handler', () => {
+      it('should pass event name as first argument to handler', function () {
         function handler (event) {
           writeLog(event);
         }
@@ -349,7 +349,7 @@ describe('event-emit', () => {
         ]);
       });
 
-      it('should pass given data to handlers', () => {
+      it('should pass given data to handlers', function () {
         var foo = { foo: 'bar' };
         var bar = 'bar';
         var xyz = 2;
@@ -387,13 +387,13 @@ describe('event-emit', () => {
         ee.emit('event_4', foo, bar, xyz, zcx);
       });
 
-      it('should return instance for chaining', () => {
+      it('should return instance for chaining', function () {
         expect(ee.emit('event')).toBe(ee);
       });
     });
 
-    describe('once', () => {
-      it('should subscribe to given event and remove this subscription once handler is called', () => {
+    describe('once', function () {
+      it('should subscribe to given event and remove this subscription once handler is called', function () {
         ee.once('event_1', writeLogFn('event_1a'));
         ee.once('event_2', writeLogFn('event_2'));
         ee.once('event_1', writeLogFn('event_1b'));
@@ -414,8 +414,8 @@ describe('event-emit', () => {
         ]);
       });
 
-      it('should handle nested calls properly', () => {
-        ee.once('event_1', () => {
+      it('should handle nested calls properly', function () {
+        ee.once('event_1', function () {
           writeLog('event_1a');
           ee.once('event_1', writeLogFn('event_1b'));
         });
@@ -441,8 +441,8 @@ describe('event-emit', () => {
         expect(log).toEqual([]);
       });
 
-      it('should support a context for handler', () => {
-        const obj = {
+      it('should support a context for handler', function () {
+        var obj = {
           foo: 'bar',
           getFoo: function getFoo () {
             writeLog(this.foo);
@@ -458,7 +458,7 @@ describe('event-emit', () => {
         ]);
       });
 
-      it('should support multiple events', () => {
+      it('should support multiple events', function () {
         ee.once('event_1 event_2', writeLogFn('handler_1'));
         ee.once(' event_2   event_3 ', writeLogFn('handler_2'));
 
@@ -482,7 +482,7 @@ describe('event-emit', () => {
         expect(log).toEqual([]);
       });
 
-      it('should return instance for chaining', () => {
+      it('should return instance for chaining', function () {
         expect(ee.once('event', noop)).toBe(ee);
       });
     });

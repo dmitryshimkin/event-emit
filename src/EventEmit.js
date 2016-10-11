@@ -1,5 +1,3 @@
-'use strict';
-
 var R_SPACE = /\s+/;
 
 /**
@@ -17,7 +15,6 @@ function EventEmit () {
  * @param  {Boolean}  [once]
  * @returns {Object}
  */
-
 function on (events, handler, context, once) {
   var all = this._subscriptions;
   var eventsList = events.split(R_SPACE);
@@ -54,7 +51,6 @@ function on (events, handler, context, once) {
  * @param   {Object}   [context]
  * @returns {Object}
  */
-
 function once (events, handler, context) {
   return this.on(events, handler, context, true);
 }
@@ -66,7 +62,6 @@ function once (events, handler, context) {
  * @param   {Object}   [context]
  * @returns {Object}
  */
-
 function off (events, handler, context) {
   if (!this._subscriptions) {
     return this;
@@ -139,7 +134,6 @@ function off (events, handler, context) {
  * @param   {String} events
  * @returns {Object}
  */
-
 function emit (events) {
   if (!this._subscriptions) {
     return this;
@@ -185,10 +179,10 @@ function emit (events) {
 
 var api = EventEmit.prototype;
 
-api.on      = on;
-api.once    = once;
-api.off     = off;
-api.emit    = emit;
+api.on = on;
+api.once = once;
+api.off = off;
+api.emit = emit;
 
 /**
  * Applies event emitter as mixin
@@ -196,7 +190,6 @@ api.emit    = emit;
  * @public
  * @static
  */
-
 function mixinTo (target) {
   target.on   = api.on;
   target.once = api.once;
@@ -205,5 +198,3 @@ function mixinTo (target) {
 }
 
 EventEmit.mixinTo = mixinTo;
-
-module.exports = EventEmit;
