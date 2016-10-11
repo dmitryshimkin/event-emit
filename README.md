@@ -46,7 +46,7 @@ or as a AMD module:
 ```javascript
 define(['EventEmit'], function (EventEmit) {
   // Use EventEmit here
-});
+})
 ```
 
 or as a ES2015 module:
@@ -69,11 +69,11 @@ EventEmit.mixinTo(componentA)
 
 // Subscribe to event
 componentA.on('some_event', function (evt) {
-  console.log(`event ${evt} has been fired`);
-});
+  console.log(`event ${evt} has been fired`)
+})
 
 // Publish the event
-componentA.emit('some_event');
+componentA.emit('some_event')
 ```
 
 ### Listener context
@@ -91,7 +91,7 @@ const componentB = {
 EventEmit.mixinTo(componentA)
 
 // Subscribe to the event and pass a context for the listener
-componentA.on('some_event', componentB.onChange, componentB);
+componentA.on('some_event', componentB.onChange, componentB)
 ```
 
 ### Pass data to the listener
@@ -104,11 +104,11 @@ const componentA = {}
 EventEmit.mixinTo(componentA)
 
 componentA.on('some_event', function (evt, arg1, arg2) {
-  console.log(`event ${evt} has been fired with`, arg1, arg2); // {foo: bar}, 10
-});
+  console.log(`event ${evt} has been fired with`, arg1, arg2) // {foo: bar}, 10
+})
 
 // Publish the event
-componentA.emit('some_event', {foo: bar}, 10);
+componentA.emit('some_event', {foo: bar}, 10)
 ```
 
 ### Add a one time subscription
@@ -122,11 +122,11 @@ EventEmit.mixinTo(componentA)
 
 // Subscribe to the event
 componentA.once('event', function () {
-  console.log('event fired');
-});
+  console.log('event fired')
+})
 
-componentA.emit('event'); // "event fired"
-componentA.emit('event'); // Nothing happened
+componentA.emit('event') // "event fired"
+componentA.emit('event') // Nothing happened
 ```
 
 ### Remove a subscription
@@ -198,7 +198,7 @@ const {
   emit: publish,
   on: subscribe,
   off: unsubscribe
-} = EventEmit.prototype;
+} = EventEmit.prototype
 
 export default {
   publish,
@@ -212,7 +212,7 @@ export default {
 import pubsub from 'path/to/pubsub'
 
 pubsub.subscribe('some-event', function (evt, data) {
-  console.log(`Pubsub event ${evt} has been fired with`, data);
+  console.log(`Pubsub event ${evt} has been fired with`, data)
 })
 ```
 
